@@ -74,7 +74,7 @@ $pattern = '/<span class=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU
 <?php
 
 //福山市のHPからCSVデータ取得
-//2021/07/25からtab区切りかつSJISに仕様変更（それまではカンマ区切り、UTF-8だった）したため、その判別が必要。
+//CSVファイルがtab区切りかつSJISだったり、カンマ区切りかつUTF-8だったりするため、その判別が必要
 $csv = file_get_contents("https://data.city.fukuyama.hiroshima.jp/dataset/568687d8-6dc7-4a70-9101-98ff2dda5b28/resource/d0c5baf8-5061-484c-836a-994b322603d6/download/342076_fukuyama_covid19_04_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
 $lines = str_getcsv($csv, "\r\n");
@@ -103,23 +103,23 @@ $arry_column = [0, 5, 6, 7, 8 ,12 ,15];
 //15 コメント
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
-$cnt_total_all_period = $cnt - 1;
+$cnt_total_all_period = $cnt - 1; //トータルの患者数
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  if ($CSV_format == 'SJIS') {
+  if ($CSV_format == 'SJIS') { //コメント行の取得
     $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
   } else {
     $comment=$records[$i][15];
   }
-  if(empty($str_last_updated)){
+  if(empty($str_last_updated)){ //直近1週間の期間を設定
     $str_search_day1 = strtotime('-7 days');
   } else {
     $str_search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
   }
-  if ($str_search_day1 > strtotime($records[$i][6])) {
+  if ($str_search_day1 > strtotime($records[$i][6])) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
-    $second_index = $i;
+    $second_index = $i; //その前の1週間の判定に使用
     break;
-  } else {
+  } else { //濃厚接触者の判定
     if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
     } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
@@ -130,35 +130,35 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
     }
   }
 }
-$unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100);
+$unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100); //経路不明の患者の割合を計算
 
 
 
 
-//1週間のデータ(-14 to -8)
-for ($i = $second_index; $i>=1; $i--) {
-  if ($CSV_format == 'SJIS') {
+//2-1週間前のデータ
+for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウント
+  if ($CSV_format == 'SJIS') { //コメント行の取得
     $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
   } else {
     $comment=$records[$i][15];
   }
-  if(empty($str_last_updated)){
+  if(empty($str_last_updated)){ //2-1週間前の期間を設定
     $str_search_day2 = strtotime('-14 days');
   } else {
     $str_search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
   }
-  if ($str_search_day2 > strtotime($records[$i][6])) {
-    $cnt_total2 = $second_index - $i;
+  if ($str_search_day2 > strtotime($records[$i][6])) { //2週間前＋1日の日時まで来たら終了
+    $cnt_total2 = $second_index - $i; //2-1週間前の症例数を記録
     break;
-  } else {
+  } else { //濃厚接触者の判定
     if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
 
     } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
     } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
-      $cnt_unknown2++;
+      
     } else {
-      $cnt_unknown2++;
+
     }
   }
 }
@@ -175,11 +175,10 @@ if(empty($str_last_updated)){
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/4.6) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
 if(empty($str_last_updated)){
-
+  echo "市のデータは毎日夕方に更新されます。<br />";
 } else {
   echo "最終更新日時：" . $str_last_updated;
 }
-//echo "市のデータは毎日夕方に更新されます。<br />";
 
 ?>
 </div>
@@ -190,20 +189,19 @@ echo "直近1ヶ月の陽性者リスト<br />";
 //1ヶ月のリスト取得
 echo "<table border=1>";
   echo "<tr>";
-  echo "<td>経路不明</td>";
+  echo "<th>経路不明</th>";
 foreach ($arry_column as $col) {
-  echo "<td>";
-  if ($CSV_format == 'SJIS') {
+  echo "<th>";
+  if ($CSV_format == 'SJIS') { //行の先頭列の設定
     $th_label=mb_convert_encoding($records[0][$col], "utf-8", "SJIS");
   } else {
     $th_label=$records[0][$col];
   }
   echo $th_label;
-  echo "</td>";
+  echo "</th>";
 }
   echo "</tr>";
 
-  $cnt_total_all_period = $cnt - 1;
   for ($i = $cnt_total_all_period; $i>=1; $i--) {
     $examday=$records[$i][6];
     if (strtotime('-30 days') > strtotime($examday)) {
@@ -216,6 +214,7 @@ foreach ($arry_column as $col) {
       } else {
         $comment=$records[$i][15];
       }
+      // 濃厚接触者の判定
       if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
       } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
