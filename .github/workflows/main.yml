@@ -1,19 +1,22 @@
+name: FTPS 
+
 on:
-  push:                 
-    branches:           
-      - master    
-name: Build and Deploy  
+  push:
+    branches: [master]
+
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action     # JOBの名前
-    runs-on: ubuntu-latest      # 仮想環境の種類を指定
+  deploy:
+    name: 🚀 Deploy website every commit
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master                   
-      - name: FTP-Deploy-Action
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }} 
           password: ${{ secrets.FTP_PASSWORD }} 
-          protocol: ftps
-          port: ${{ secrets.FTP_PORT }}
+          server-dir: /home/c1919186/
+          
