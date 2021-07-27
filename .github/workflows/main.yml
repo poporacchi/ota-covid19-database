@@ -15,5 +15,4 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}:${{ secrets.FTP_PORT }}    
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }} 
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }} 
-          LOCAL_DIR: ./                           
-          REMOTE_DIR: "/home/c1919186/"
+          LOCAL_DIR: ./
