@@ -31,9 +31,36 @@ table {
 </style>
 </head>
 <body>
-<h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
+
+<?php
+//更新日の取得
+$target = "https://data.city.fukuyama.hiroshima.jp/dataset/covid19_information";
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $target);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$web_page = curl_exec($curl);
+curl_close($curl);
+$pattern = '/<span class=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU';
+  if( preg_match_all($pattern, $web_page , $result) ){
+    $last_updated = strtotime($result[1][0] . "+9 hours");
+    $str_last_updated=date('Y/m/d H時i分',strtotime($result[1][0]));
+  }else{
+    // エラーの時
+    $last_updated = strtotime(date('Y/m/d'));
+    $str_last_updated='';
+  }
+?>
 <article>
-<!-- 福山市が公開しているデータベースを引用しています -->
+<h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
+<div style="text-align:right;">
+  <?php
+  if(empty($str_last_updated)){
+
+  } else {
+    echo "最終更新日時：" . $str_last_updated;
+  }
+   ?>
+</div>
 
 <div class="base">
 <div class="upper_base">
@@ -45,33 +72,58 @@ table {
 <div>
 <br />
 <?php
-$csv = file_get_contents("https://data.city.fukuyama.hiroshima.jp/dataset/568687d8-6dc7-4a70-9101-98ff2dda5b28/resource/d0c5baf8-5061-484c-836a-994b322603d6/download/342076_fukuyama_covid19_01_patients.csv");
+
+//福山市のHPからCSVデータ取得
+//2021/07/25からtab区切りかつSJISに仕様変更（それまではカンマ区切り、UTF-8だった）したため、その判別が必要。
+$csv = file_get_contents("https://data.city.fukuyama.hiroshima.jp/dataset/568687d8-6dc7-4a70-9101-98ff2dda5b28/resource/d0c5baf8-5061-484c-836a-994b322603d6/download/342076_fukuyama_covid19_04_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
-//$records[] = str_getcsv($csv,',','"');
 $lines = str_getcsv($csv, "\r\n");
-foreach ($lines as $line) {
-  $records[] = str_getcsv($line);
+if (preg_match('/No,/',$lines[0],$result)){
+  //delimiterがカンマ区切りは文字コードはUTF-8と思われる。
+  $delimiter = ",";
+  $CSV_format = 'UTF-8';
+} else {
+  //delimiterがカンマ区切りでない（タブ区切り）は文字コードはSJISと思われる。
+  $delimiter = "\t";
+  $CSV_format = 'SJIS';
 }
-$cnt = count($records); // 症例数は$cnt-2
+foreach ($lines as $line) {
+  $records[] = str_getcsv($line, $delimiter);
+}
+$cnt = count($records); // 症例数は$cnt-1
+
 
 $arry_column = [0, 5, 6, 7, 8 ,12 ,15];
 // 0 No;
 // 5 発症日;
 // 6 確定日;
+// 7 居住地
+// 8 年齢
+//12 症状
+//15 コメント
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
-$cnt_total_all_period = $cnt - 2;
+$cnt_total_all_period = $cnt - 1;
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  //echo "i: " . $i . ", No: " . $records[$i][0] . ", " . $records[$i][6] . ", " . $records[$i][15] . "<br />";
-  if (strtotime('-8 days') > strtotime($records[$i][6])) {
+  if ($CSV_format == 'SJIS') {
+    $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
+  } else {
+    $comment=$records[$i][15];
+  }
+  if(empty($str_last_updated)){
+    $str_search_day1 = strtotime('-7 days');
+  } else {
+    $str_search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
+  }
+  if ($str_search_day1 > strtotime($records[$i][6])) {
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
-    $end_index = $i-1;
+    $second_index = $i;
     break;
   } else {
-    if ( preg_match('/濃厚接触者/', $records[$i][15], $matches) ) {
-    } else if ( preg_match ('/の接触者/', $records[$i][15], $matches) ){
+    if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
+    } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
-    } else if ( preg_match ('/他事例との関連調査中/', $records[$i][15], $matches) ){
+    } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
       $cnt_unknown++;
     } else {
       $cnt_unknown++;
@@ -84,33 +136,51 @@ $unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100);
 
 
 //1週間のデータ(-14 to -8)
-for ($i = $end_index; $i>=1; $i--) {
-  //echo "i: " . $i . ", No: " . $records[$i][0] . ", " . $records[$i][6] . ", " . $records[$i][15];
-  if (strtotime('-14 days') > strtotime($records[$i][6])) {
-    $cnt_total2 = $end_index - $i;
+for ($i = $second_index; $i>=1; $i--) {
+  if ($CSV_format == 'SJIS') {
+    $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
+  } else {
+    $comment=$records[$i][15];
+  }
+  if(empty($str_last_updated)){
+    $str_search_day2 = strtotime('-14 days');
+  } else {
+    $str_search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
+  }
+  if ($str_search_day2 > strtotime($records[$i][6])) {
+    $cnt_total2 = $second_index - $i;
     break;
   } else {
-    if ( preg_match('/濃厚接触者/', $records[$i][15], $matches) ) {
+    if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
 
-    } else if ( preg_match ('/の接触者/', $records[$i][15], $matches) ){
+    } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
-    } else if ( preg_match ('/他事例との関連調査中/', $records[$i][15], $matches) ){
+    } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
       $cnt_unknown2++;
     } else {
       $cnt_unknown2++;
     }
   }
 }
-$unknown_rate = (int)(($cnt_unknown2 / $cnt_total2) * 100);
-
 ?>
 <div class="message">
 <?php
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
-echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
+if(empty($str_last_updated)){
+  echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
+} else {
+  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-1 day')) . "）<br />";
+}
+
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/4.6) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
-echo "市のデータは毎日夕方に更新されます。<br />";
+if(empty($str_last_updated)){
+
+} else {
+  echo "最終更新日時：" . $str_last_updated;
+}
+//echo "市のデータは毎日夕方に更新されます。<br />";
+
 ?>
 </div>
 <?php
@@ -123,23 +193,34 @@ echo "<table border=1>";
   echo "<td>経路不明</td>";
 foreach ($arry_column as $col) {
   echo "<td>";
-  echo $records[0][$col];
+  if ($CSV_format == 'SJIS') {
+    $th_label=mb_convert_encoding($records[0][$col], "utf-8", "SJIS");
+  } else {
+    $th_label=$records[0][$col];
+  }
+  echo $th_label;
   echo "</td>";
 }
   echo "</tr>";
 
-  for ($i = $cnt-2; $i>=1; $i--) {
-
-    if (strtotime('-30 days') > strtotime($records[$i][6])) {
+  $cnt_total_all_period = $cnt - 1;
+  for ($i = $cnt_total_all_period; $i>=1; $i--) {
+    $examday=$records[$i][6];
+    if (strtotime('-30 days') > strtotime($examday)) {
 
     } else {
       echo "<tr>";
       echo "<td>";
-      if ( preg_match('/濃厚接触者/', $records[$i][15], $matches) ) {
-      } else if ( preg_match ('/の接触者/', $records[$i][15], $matches) ){
+      if ($CSV_format == 'SJIS') {
+        $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
+      } else {
+        $comment=$records[$i][15];
+      }
+      if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
+      } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
-      } else if ( preg_match ('/他事例との関連調査中/', $records[$i][15], $matches) ){
-        if ( preg_match('/県外往来等あり/', $records[$i][15], $matches) ) {
+      } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
+        if ( preg_match('/県外往来等あり/', $comment, $matches) ) {
           echo "△"; // 経路不明
         } else {
           echo "○"; // 経路不明
@@ -151,10 +232,15 @@ foreach ($arry_column as $col) {
       echo "</td>";
       foreach ($arry_column as $col) {
         echo "<td>";
-        echo $records[$i][$col];
+        if ($CSV_format == 'SJIS') {
+          $td = mb_convert_encoding($records[$i][$col], "utf-8", "SJIS");
+        } else {
+          $td = $records[$i][$col];
+        }
+        echo $td;
         echo "</td>";
       }
-      $arr_examday[] = $records[$i][6];
+      $arr_examday[] = $examday;
       echo "</tr>";
     }
 
