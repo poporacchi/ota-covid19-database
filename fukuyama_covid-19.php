@@ -33,7 +33,7 @@ table {
 <body>
 <h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
 <article>
-
+<!-- 福山市が公開しているデータベースを引用しています -->
 
 <div class="base">
 <div class="upper_base">
