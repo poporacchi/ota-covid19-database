@@ -34,13 +34,34 @@ table {
 <!-- 福山市のデータベースから引用 -->
 <!-- 2021/07/26 作成          -->
 
-<?php 
-$last_updated = strtotime('Ymd');
+<?php
+//更新日の取得
+$target = "https://hiroshima.stopcovid19.jp";
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $target);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$web_page = curl_exec($curl);
+curl_close($curl);
+$pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
+  if( preg_match_all($pattern, $web_page , $result) ){
+    $last_updated = strtotime($result[2][0] . "+9 hours");
+    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0]) . "+9 hours");
+  }else{
+    // エラーの時
+    $last_updated = strtotime(date('Y/m/d'));
+    $str_last_updated='';
+  }
 ?>
 <article>
 <h2>広島県新型コロナウイルス感染症 簡易まとめ</h2>
 <div style="text-align:right;">
-  
+  <?php
+  if(empty($str_last_updated)){
+
+  } else {
+    echo "最終更新日時：" . $str_last_updated;
+  }
+   ?>
 </div>
 
 <div class="base">
@@ -178,7 +199,7 @@ foreach ($arry_column as $col) {
 </div>
 </div>
   元データ： <br />
-  <a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6" title="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6</a><br />
+  <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
   解析方法：
   <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
 </article>
