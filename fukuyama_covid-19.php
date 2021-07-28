@@ -166,7 +166,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 }
 ?>
 <div class="message">
-<h2><a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">福山市</a></h2>
+<h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
 <?php
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
@@ -470,7 +470,7 @@ foreach ($arry_column as $col) {
 </div>
   元データ： <br />
   <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
-  <a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6" title="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6</a><br />
+  <a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/" title="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/</a><br />
   <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a><br />
   ソースコード：
   <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
