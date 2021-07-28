@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+<head> 
   <meta charset="UTF-8">
 <title>福山市新型コロナウイルス陽性者数</title>
 <style>
