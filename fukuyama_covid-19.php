@@ -280,8 +280,8 @@ echo "10万人あたり" . sprintf('%.1f',$cnt_total2_1/28.1) . "人, 先週比�
 if(empty($str_last_updated2)){
   echo "広島県のデータは毎日午前中に更新されます。<br />";
 } else {
-  echo "最終更新日時：" . $str_last_updated2;
-  echo "広島県のデータは福山市に遅れて更新されます。";
+  echo "最終更新日時：" . $str_last_updated2 . "<br />";
+  echo "広島県のデータは福山市より遅れて更新されます。";
 }
 
 ?>
