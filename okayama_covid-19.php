@@ -106,9 +106,9 @@ date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
 $cnt_total_all_period = $cnt - 1; //トータルの患者数
 if(empty($str_last_updated)){ //直近1週間の期間を設定
-  $search_day1 = strtotime('-7 days');
+  $search_day1 = strtotime('-6 days');
 } else {
-  $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
+  $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-6 days');
 }
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
   if ($search_day1 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //1週間前＋1日の日時まで来たら終了
@@ -119,9 +119,9 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
 }
 //2-1週間前のデータ
 if(empty($str_last_updated)){ //2-1週間前の期間を設定
-    $search_day2 = strtotime('-14 days');
+    $search_day2 = strtotime('-13 days');
   } else {
-    $search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
+    $search_day2 = strtotime(date('Y/m/d',$last_updated) . '-13 days');
   }
 for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウント
   if ($search_day2 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //2週間前＋1日の日時まで来たら終了
@@ -142,7 +142,11 @@ if(empty($str_last_updated)){
 
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/19) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
-
+if(empty($str_last_updated)){
+    echo "岡山のデータは毎日夕方に更新されます。<br />";
+  } else {
+    echo "最終更新日時：" . $str_last_updated;
+  }
 
 ?>
 </div>
