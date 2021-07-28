@@ -140,16 +140,16 @@ $unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100); //経路不明の患�
 //2-1週間前のデータ
 for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウント
   if ($CSV_format == 'SJIS') { //コメント行の取得
-    $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
+    $comment=mb_convert_encoding($records[$i][$arry_column['comment']], "utf-8", "SJIS");
   } else {
-    $comment=$records[$i][15];
+    $comment=$records[$i][$arry_column['comment']];
   }
   if(empty($str_last_updated)){ //2-1週間前の期間を設定
     $str_search_day2 = strtotime('-14 days');
   } else {
     $str_search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
   }
-  if ($str_search_day2 > strtotime($records[$i][6])) { //2週間前＋1日の日時まで来たら終了
+  if ($str_search_day2 > strtotime($records[$i][$arry_column['examin']])) { //2週間前＋1日の日時まで来たら終了
     $cnt_total2 = $second_index - $i; //2-1週間前の症例数を記録
     break;
   } else { //濃厚接触者の判定
@@ -205,16 +205,16 @@ foreach ($arry_column as $col) {
   echo "</tr>";
 
   for ($i = $cnt_total_all_period; $i>=1; $i--) {
-    $examday=$records[$i][6];
+    $examday=$records[$i][$arry_column['examin']];
     if (strtotime('-30 days') > strtotime($examday)) {
 
     } else {
       echo "<tr>";
       echo "<td>";
       if ($CSV_format == 'SJIS') {
-        $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
+        $comment=mb_convert_encoding($records[$i][$arry_column['comment']], "utf-8", "SJIS");
       } else {
-        $comment=$records[$i][15];
+        $comment=$records[$i][$arry_column['comment']];
       }
       // 濃厚接触者の判定
       if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
