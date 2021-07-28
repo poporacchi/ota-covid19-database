@@ -276,7 +276,11 @@ if(empty($str_last_updated2)){
 }
 
 echo "10万人あたり" . sprintf('%.1f',$cnt_total2_1/28.1) . "人, 先週比：" . (int)(($cnt_total2_1 / $cnt_total2_2) * 100) . "%</h3>";
-
+if(empty($str_last_updated2)){
+  echo "広島県のデータは毎日午前中に更新されます。<br />";
+} else {
+  echo "最終更新日時：" . $str_last_updated2;
+}
 
 ?>
 </div>
