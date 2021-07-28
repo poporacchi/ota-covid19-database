@@ -56,11 +56,25 @@ $pattern = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
     $str_last_updated='';
   }
 
+//感染状況の取得
+$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+$curl2 = curl_init();
+curl_setopt($curl2, CURLOPT_URL, $target2);
+curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
+$web_page2 = curl_exec($curl2);
+curl_close($curl2);
+$pattern2 = '/<strong>総合的判断：(.*)<\/strong>/siU';
+if( preg_match_all($pattern2, $web_page2 , $result2) ){
+  $str_stage = $result2[1][0];
+}else{
+  // エラーの時
+  $str_stage='';
+}
 ?>
 
 
 <article>
-<h2>広島県新型コロナウイルス感染症 簡易まとめ</h2>
+<h2>岡山県新型コロナウイルス感染症 簡易まとめ</h2>
 <div style="text-align:right;">
   <?php
   if(empty($str_last_updated)){
@@ -133,6 +147,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 <div class="message">
 <?php
 echo "<h2>岡山県</h2>";
+echo "<h3>" . $str_stage . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
