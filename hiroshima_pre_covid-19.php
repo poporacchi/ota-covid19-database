@@ -146,8 +146,6 @@ if(empty($str_last_updated)){
 } else {
   echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-1 day')) . "）<br />";
 }
-
-echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/28.1) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
 
 

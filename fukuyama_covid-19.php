@@ -206,11 +206,12 @@ $pattern2 = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/si
 //感染状況の取得
   $pattern3 = '/<h4>感染状況<\/h4>(.*)<p\sdata-v-883a402c>(.*)<\/p>/siU';
     if( preg_match_all($pattern3, $web_page2 , $result3) ){
-      $str_stage = $result3[2][0];
+      $str_stage_hiroshima = $result3[2][0];
     }else{
       // エラーの時
-      $str_stage='';
+      $str_stage_hiroshima='';
     }
+
 //広島県のHPからCSVデータ取得
 $csv2 = file_get_contents("https://www.pref.hiroshima.lg.jp/soshiki_file/brand/covid19/opendata/340006_hiroshima_covid19_01_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
@@ -267,7 +268,7 @@ for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウ
 <div class="message">
 <?php
 echo "<h2>広島県</h2>";
-echo "<h3>" . $str_stage . "</h3>";
+echo "<h3>" . $str_stage_hiroshima . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
 if(empty($str_last_updated2)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
@@ -284,6 +285,115 @@ if(empty($str_last_updated2)){
 }
 
 ?>
+
+<?php
+//岡山県の更新日の取得
+$target_okayama = "http://www.okayama-opendata.jp/opendata/ga130PreAction.action?resourceName=感染者詳細情報&keyTitle=d9c4776db7f09fff161953a2aaf03b80a9abad48&title=新型コロナウイルス感染症に関するデータ（岡山県）&isParam=1&resourceId=d021c012-297e-4ea9-bffa-cf55741884d1&licenseTitle=クリエイティブ・コモンズ+表示&datasetId=e6b3c1d2-2f1f-4735-b36e-e45d36d94761&checkFieldFormat=CSV";
+$curl_okayama = curl_init();
+curl_setopt($curl_okayama, CURLOPT_URL, $target_okayama);
+curl_setopt($curl_okayama, CURLOPT_RETURNTRANSFER, true);
+$web_page_okayama = curl_exec($curl_okayama);
+curl_close($curl_okayama);
+$pattern_okayama = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
+  if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama) ){
+    $str_date = $result_okayama[2][0];
+    $str_date = str_replace('年','/',$str_date);
+    $str_date = str_replace('月','/',$str_date);
+    $str_date = str_replace('日','',$str_date);
+    $last_updated_okayama = strtotime($str_date);
+    $str_last_updated_okayama=$str_date;
+  }else{
+    // エラーの時
+    $last_updated_okayama = strtotime(date('Y/m/d'));
+    $str_last_updated_okayama='';
+  }
+
+//感染状況の取得
+$target_okayama = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+$curl_okayama = curl_init();
+curl_setopt($curl_okayama, CURLOPT_URL, $target_okayama);
+curl_setopt($curl_okayama, CURLOPT_RETURNTRANSFER, true);
+$web_page_okayama = curl_exec($curl_okayama);
+curl_close($curl_okayama);
+$pattern_okayama = '/<strong>総合的判断：(.*)<\/strong>/siU';
+if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama2) ){
+  $str_stage_okayama = $result_okayama2[1][0];
+}else{
+  // エラーの時
+  $str_stage_okayama='';
+}
+
+//岡山県のHPからCSVデータ取得
+$csv_okayama = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
+setlocale( LC_ALL, 'ja_JP' );
+$lines_okayama = str_getcsv($csv_okayama, "\r\n");
+if (preg_match('/330001,/',$lines_okayama[1],$result_okayama)){
+  //delimiter
+  $delimiter_okayama = ",";
+  $CSV_format_okayama = 'SJIS';
+} else {$
+  //delimiter
+  $delimiter_okayama = "\t";
+  $CSV_format_okayama = 'SJIS';
+}
+foreach ($lines_okayama as $line) {
+  $records_okayama[] = str_getcsv($line, $delimiter_okayama);
+}
+$cnt_okayama = count($lines_okayama); // 症例数は$cnt-1
+
+$arry_column_okayama = array('examin'=>3, 'living'=>5 ,'age'=>6);
+// 3 公表日
+// 5 居住地
+// 6 年齢
+date_default_timezone_set('Asia/Tokyo');
+//1週間のデータ
+$cnt_total_all_period_okayama = $cnt_okayama - 1; //トータルの患者数
+if(empty($str_last_updated_okayama)){ //直近1週間の期間を設定
+  $search_day1_okayama = strtotime('-6 days');
+} else {
+  $search_day1_okayama = strtotime($str_last_updated_okayama . '-6 days');
+}
+for ($i = $cnt_total_all_period_okayama; $i>=1; $i--) {
+  if ($search_day1_okayama > strtotime($records_okayama[$i][$arry_column_okayama['examin']])) { //1週間前＋1日の日時まで来たら終了
+    $cnt_total_okayama = $cnt_total_all_period_okayama - $i; //直近1週間の症例数を記録
+    $second_index_okayama = $i; //その前の1週間の判定に使用
+    break;
+  } 
+}
+//2-1週間前のデータ
+if(empty($str_last_updated_okayama)){ //2-1週間前の期間を設定
+    $search_day2_okayama = strtotime('-13 days');
+  } else {
+    $search_day2_okayama = strtotime($str_last_updated_okayama . '-13 days');
+  }
+for ($i = $second_index_okayama; $i>=1; $i--) { //1週間前より前の患者のカウント
+  if ($search_day2_okayama > strtotime($records_okayama[$i][$arry_column_okayama['examin']])) { //2週間前＋1日の日時まで来たら終了
+    $cnt_total2_okayama = $second_index_okayama - $i; //2-1週間前の症例数を記録
+    break;
+  }
+}
+
+?>
+<div class="message">
+<?php
+echo "<h2>岡山県</h2>";
+echo "<h3>[" . $str_stage_okayama . "]</h3>";
+echo "<h3>一週間の陽性者数：" . $cnt_total_okayama . "人";
+if(empty($str_last_updated_okayama)){
+  echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
+} else {
+  echo "（" . date('n/j',strtotime($str_last_updated_okayama . '-6 days')) . "〜" . date('n/j',$last_updated_okayama) . "）<br />";
+}
+
+echo "10万人あたり" . sprintf('%.1f',$cnt_total_okayama/19) . "人, 先週比：" . (int)(($cnt_total_okayama / $cnt_total2_okayama) * 100) . "%</h3>";
+if(empty($str_last_updated_okayama)){
+    echo "岡山のデータは毎日夕方に更新されます。<br />";
+  } else {
+    echo "最終更新日時：" . $str_last_updated_okayama;
+  }
+
+?>
+</div>
 </div>
 </div>
 
@@ -360,6 +470,7 @@ foreach ($arry_column as $col) {
   元データ： <br />
   <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
   <a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6" title="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6</a><br />
+  <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a>
   解析方法：
   <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
 </article>
@@ -367,7 +478,7 @@ foreach ($arry_column as $col) {
 
 <footer>
   <hr />
-  <p>©️ 2021 大田記念病院感染管理室</p>
+  <p>&copy;&nbsp;2021&nbsp;大田記念病院感染管理室</p>
 </footer>
 
 </body>

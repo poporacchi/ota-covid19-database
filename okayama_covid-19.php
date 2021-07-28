@@ -92,8 +92,7 @@ if( preg_match_all($pattern2, $web_page2 , $result2) ){
 <br />
 <?php
 
-//広島県のHPからCSVデータ取得
-//CSVファイルがtab区切りかつSJISだったり、カンマ区切りかつUTF-8だったりするため、その判別が必要
+//岡山県のHPからCSVデータ取得
 $csv = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
 setlocale( LC_ALL, 'ja_JP' );
 $lines = str_getcsv($csv, "\r\n");
@@ -112,7 +111,6 @@ foreach ($lines as $line) {
 $cnt = count($lines); // 症例数は$cnt-1
 
 $arry_column = array('examin'=>3, 'living'=>5 ,'age'=>6);
-// 0 No;
 // 3 公表日
 // 5 居住地
 // 6 年齢
@@ -155,7 +153,6 @@ if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-6 days')) . "〜" . date('n/j',strtotime($last_updated)) . "）<br />";
 }
 
-echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/19) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
 if(empty($str_last_updated)){
     echo "岡山のデータは毎日夕方に更新されます。<br />";
