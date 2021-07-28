@@ -285,6 +285,7 @@ if(empty($str_last_updated2)){
 }
 
 ?>
+</div>
 
 <?php
 //岡山県の更新日の取得
@@ -393,7 +394,7 @@ if(empty($str_last_updated_okayama)){
   }
 
 ?>
-</div>
+
 </div>
 </div>
 
