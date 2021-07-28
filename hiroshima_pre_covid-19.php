@@ -45,7 +45,7 @@ curl_close($curl);
 $pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
     $last_updated = strtotime($result[2][0] . "+9 hours");
-    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0]) . "+9 hours");
+    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0] . "+9 hours"));
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/m/d'));
