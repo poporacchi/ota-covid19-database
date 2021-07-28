@@ -471,8 +471,8 @@ foreach ($arry_column as $col) {
   元データ： <br />
   <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
   <a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6" title="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6</a><br />
-  <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a>
-  解析方法：
+  <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a><br />
+  ソースコード：
   <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
 </article>
 
