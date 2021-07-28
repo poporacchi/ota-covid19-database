@@ -148,8 +148,18 @@ foreach ($arry_column as $col) {
         echo "<td>";
         if ($CSV_format == 'SJIS') {
           $td = mb_convert_encoding($records[$i][$col], "utf-8", "SJIS");
+          if ($col == 4) {
+              $td = str_replace('-','/',$td);
+          } else ($col == 5) {
+            $td = str_replace('-','/',$td);
+          }
         } else {
           $td = $records[$i][$col];
+          if ($col == 4) {
+            $td = str_replace('-','/',$td);
+          } else ($col == 5) {
+            $td = str_replace('-','/',$td);
+          }
         }
         echo $td;
         echo "</td>";
