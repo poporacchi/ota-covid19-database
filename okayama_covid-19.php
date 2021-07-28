@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-<title>広島県新型コロナウイルス陽性者数</title>
+<title>岡山県新型コロナウイルス陽性者数</title>
 <style>
 table {
   border-collapse: collapse;
@@ -31,7 +31,7 @@ table {
 </style>
 </head>
 <body>
-<!-- 広島県のデータベースから引用 -->
+<!-- 岡山県のデータベースから引用 -->
 <!-- 2021/07/28 作成          -->
 
 <?php
@@ -52,14 +52,6 @@ $pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU
     $str_last_updated='';
   }
 
-//感染状況の取得
-  $pattern2 = '/<h4>感染状況<\/h4>(.*)<p\sdata-v-883a402c>(.*)<\/p>/siU';
-    if( preg_match_all($pattern2, $web_page , $result2) ){
-      $str_stage = $result2[2][0];
-    }else{
-      // エラーの時
-      $str_stage='';
-    }
 ?>
 
 
@@ -103,11 +95,9 @@ $cnt = count($lines); // 症例数は$cnt-1
 
 $arry_column = array('examin'=>3, 'living'=>5 ,'age'=>6);
 // 0 No;
-// 4 公表日;
-// 5 発症日;
-// 6 保健所
-// 7 居住地
-//9 年齢
+// 3 公表日
+// 5 居住地
+// 6 年齢
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
 $cnt_total_all_period = $cnt - 1; //トータルの患者数
@@ -138,8 +128,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 ?>
 <div class="message">
 <?php
-echo "<h2>広島県</h2>";
-echo "<h3>" . $str_stage . "</h3>";
+echo "<h2>岡山県</h2>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
@@ -148,7 +137,7 @@ if(empty($str_last_updated)){
 }
 
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
-echo "10万人あたり" . sprintf('%.1f',$cnt_total/28.1) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
+echo "10万人あたり" . sprintf('%.1f',$cnt_total/19) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
 
 
 ?>
