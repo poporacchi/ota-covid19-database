@@ -14,7 +14,7 @@ table {
 }
 .upper_base {
   display: flex;
-  flex-direction: row;
+  √: row;
   height: 680px;
 }
 .lower_base {
@@ -71,7 +71,7 @@ $pattern = '/<span class=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU
 </div>
 
 <div class="lower_base">
-<div>
+
 <br />
 <?php
 
@@ -280,6 +280,7 @@ echo "10万人あたり" . sprintf('%.1f',$cnt_total2_1/28.1) . "人, 先週比�
 
 ?>
 </div>
+<div>
 <?php
 
 
