@@ -44,8 +44,6 @@ $last_updated = strtotime('Ymd');
 </div>
 
 <div class="base">
-<div class="upper_base">
-</div>
 
 <div class="lower_base">
 <div>
@@ -58,11 +56,11 @@ $csv = file_get_contents("https://www.pref.hiroshima.lg.jp/soshiki_file/brand/co
 setlocale( LC_ALL, 'ja_JP' );
 $lines = str_getcsv($csv, "\r\n");
 if (preg_match('/No,/',$lines[0],$result)){
-  //delimiterがカンマ区切りは文字コードはUTF-8と思われる。
+  //delimiter
   $delimiter = ",";
-  $CSV_format = 'UTF-8';
+  $CSV_format = 'SJIS';
 } else {
-  //delimiterがカンマ区切りでない（タブ区切り）は文字コードはSJISと思われる。
+  //delimiter
   $delimiter = "\t";
   $CSV_format = 'SJIS';
 }
@@ -70,7 +68,7 @@ foreach ($lines as $line) {
   $records[] = str_getcsv($line, $delimiter);
 }
 $cnt = count($records); // 症例数は$cnt-1
-
+echo $CSV_format;
 
 $arry_column = [0, 5, 6, 7, 8 ,12 ,15];
 // 0 No;
