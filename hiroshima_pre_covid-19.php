@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-<title>福山市新型コロナウイルス陽性者数</title>
+<title>広島県新型コロナウイルス陽性者数</title>
 <style>
 table {
   border-collapse: collapse;
