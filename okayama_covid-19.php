@@ -147,7 +147,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 <div class="message">
 <?php
 echo "<h2>岡山県</h2>";
-echo "<h3>" . $str_stage . "</h3>";
+echo "<h3>[" . $str_stage . "]</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
