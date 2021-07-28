@@ -51,7 +51,18 @@ $pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU
     $last_updated = strtotime(date('Y/m/d'));
     $str_last_updated='';
   }
+
+//感染状況の取得
+  $pattern2 = '/<h4>感染状況<\/h4>(.*)<p\sdata-v-883a402c>(.*)<\/p>/siU';
+    if( preg_match_all($pattern2, $web_page , $result2) ){
+      $str_stage = $result2[2][0];
+    }else{
+      // エラーの時
+      $str_stage='';
+    }
 ?>
+
+
 <article>
 <h2>広島県新型コロナウイルス感染症 簡易まとめ</h2>
 <div style="text-align:right;">
@@ -127,6 +138,8 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 ?>
 <div class="message">
 <?php
+echo "<h2>広島県</h2>";
+echo "<h3>" . $str_stage . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
