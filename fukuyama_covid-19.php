@@ -14,7 +14,7 @@ table {
 }
 .upper_base {
   display: flex;
-  √: row;
+  flex-direction: row;
   height: 680px;
 }
 .lower_base {
