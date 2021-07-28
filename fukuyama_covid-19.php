@@ -469,9 +469,9 @@ foreach ($arry_column as $col) {
 </div>
 </div>
   元データ： <br />
-  <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
-  <a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/" title="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/</a><br />
-  <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a><br />
+  広島県：<a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
+  福山市：<a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/" title="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/</a><br />
+  岡山県：<a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a><br />
   ソースコード：
   <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
 </article>
