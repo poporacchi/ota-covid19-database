@@ -135,9 +135,9 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 echo "<h2>岡山県</h2>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
-  echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
+  echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
 } else {
-  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-1 day')) . "）<br />";
+  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-6 days')) . "〜" . date('n/j',strtotime($last_updated)) . "）<br />";
 }
 
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
