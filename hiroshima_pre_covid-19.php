@@ -101,7 +101,7 @@ foreach ($lines as $line) {
 }
 $cnt = count($lines); // 症例数は$cnt-1
 
-$arry_column = [0, 4, 5, 6, 7, 9];
+$arry_column = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'living'=>7 ,'age'=>9);
 // 0 No;
 // 4 公表日;
 // 5 発症日;
@@ -117,7 +117,7 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
   $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
 }
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  if ($search_day1 > strtotime(str_replace('-','/',$records[$i][4]))) { //1週間前＋1日の日時まで来たら終了
+  if ($search_day1 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
     $second_index = $i; //その前の1週間の判定に使用
     break;
@@ -130,7 +130,7 @@ if(empty($str_last_updated)){ //2-1週間前の期間を設定
     $search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
   }
 for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウント
-  if ($search_day2 > strtotime(str_replace('-','/',$records[$i][4]))) { //2週間前＋1日の日時まで来たら終了
+  if ($search_day2 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //2週間前＋1日の日時まで来たら終了
     $cnt_total2 = $second_index - $i; //2-1週間前の症例数を記録
     break;
   }
@@ -173,7 +173,7 @@ foreach ($arry_column as $col) {
   echo "</tr>";
 
   for ($i = $cnt_total_all_period; $i>=1; $i--) {
-    $examday=$records[$i][4];
+    $examday=$records[$i][$arry_column['examin']];
     if (strtotime('-30 days') > strtotime($examday)) {
 
     } else {
