@@ -36,16 +36,20 @@ table {
 
 <?php
 //更新日の取得
-$target = "https://hiroshima.stopcovid19.jp";
+$target = "http://www.okayama-opendata.jp/opendata/ga130PreAction.action?resourceName=感染者詳細情報&keyTitle=d9c4776db7f09fff161953a2aaf03b80a9abad48&title=新型コロナウイルス感染症に関するデータ（岡山県）&isParam=1&resourceId=d021c012-297e-4ea9-bffa-cf55741884d1&licenseTitle=クリエイティブ・コモンズ+表示&datasetId=e6b3c1d2-2f1f-4735-b36e-e45d36d94761&checkFieldFormat=CSV";
 $curl = curl_init();
 curl_setopt($curl, CURLOPT_URL, $target);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 $web_page = curl_exec($curl);
 curl_close($curl);
-$pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
+$pattern = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
-    $last_updated = strtotime($result[2][0]);
-    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0]));
+    $str_date = $result[2][0];
+    $str_date = str_replace('年','/',$str_date);
+    $str_date = str_replace('月','/',$str_date);
+    $str_date = str_replace('日','',$str_date);
+    $last_updated = strtotime($str_date);
+    $str_last_updated=$str_date;
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/m/d'));
