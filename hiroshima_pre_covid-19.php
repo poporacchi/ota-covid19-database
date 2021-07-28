@@ -31,8 +31,8 @@ table {
 </style>
 </head>
 <body>
-<!-- 福山市のデータベースから引用 -->
-<!-- 2021/07/26 作成          -->
+<!-- 広島県のデータベースから引用 -->
+<!-- 2021/07/28 作成          -->
 
 <?php
 //更新日の取得
@@ -44,8 +44,8 @@ $web_page = curl_exec($curl);
 curl_close($curl);
 $pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
-    $last_updated = strtotime($result[2][0] . "+9 hours");
-    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0] . "+9 hours"));
+    $last_updated = strtotime($result[2][0]);
+    $str_last_updated=date('Y/m/d H時i分',strtotime($result[2][0]));
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/m/d'));

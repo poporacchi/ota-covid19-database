@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-<title>広島県新型コロナウイルス陽性者数</title>
+<title>福山市新型コロナウイルス陽性者数</title>
 <style>
 table {
   border-collapse: collapse;
@@ -44,8 +44,8 @@ $web_page = curl_exec($curl);
 curl_close($curl);
 $pattern = '/<span class=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
-    $last_updated = strtotime($result[1][0] . "+9 hours");
-    $str_last_updated=date('Y/m/d H時i分',strtotime($result[1][0] . "+9 hours"));
+    $last_updated = strtotime($result[1][0]);
+    $str_last_updated=date('Y/m/d H時i分',strtotime($result[1][0]));
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/m/d'));
