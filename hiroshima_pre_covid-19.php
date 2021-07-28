@@ -67,76 +67,40 @@ if (preg_match('/No,/',$lines[0],$result)){
 foreach ($lines as $line) {
   $records[] = str_getcsv($line, $delimiter);
 }
-$cnt = count($records); // 症例数は$cnt-1
-echo $CSV_format;
+$cnt = count($lines); // 症例数は$cnt-1
 
-$arry_column = [0, 5, 6, 7, 8 ,12 ,15];
+$arry_column = [0, 4, 5, 6, 7, 9];
 // 0 No;
+// 4 公表日;
 // 5 発症日;
-// 6 確定日;
+// 6 保健所
 // 7 居住地
-// 8 年齢
-//12 症状
-//15 コメント
+//9 年齢
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
 $cnt_total_all_period = $cnt - 1; //トータルの患者数
+if(empty($str_last_updated)){ //直近1週間の期間を設定
+  $search_day1 = strtotime('-7 days');
+} else {
+  $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
+}
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  if ($CSV_format == 'SJIS') { //コメント行の取得
-    $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
-  } else {
-    $comment=$records[$i][15];
-  }
-  if(empty($str_last_updated)){ //直近1週間の期間を設定
-    $str_search_day1 = strtotime('-7 days');
-  } else {
-    $str_search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
-  }
-  if ($str_search_day1 > strtotime($records[$i][6])) { //1週間前＋1日の日時まで来たら終了
+  if ($search_day1 > strtotime(str_replace('-','/',$records[$i][4]))) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
     $second_index = $i; //その前の1週間の判定に使用
     break;
-  } else { //濃厚接触者の判定
-    if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
-    } else if ( preg_match ('/の接触者/', $comment, $matches) ){
-
-    } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
-      $cnt_unknown++;
-    } else {
-      $cnt_unknown++;
-    }
-  }
+  } 
 }
-$unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100); //経路不明の患者の割合を計算
-
-
-
-
 //2-1週間前のデータ
+if(empty($str_last_updated)){ //2-1週間前の期間を設定
+    $search_day2 = strtotime('-14 days');
+  } else {
+    $search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
+  }
 for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウント
-  if ($CSV_format == 'SJIS') { //コメント行の取得
-    $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
-  } else {
-    $comment=$records[$i][15];
-  }
-  if(empty($str_last_updated)){ //2-1週間前の期間を設定
-    $str_search_day2 = strtotime('-14 days');
-  } else {
-    $str_search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
-  }
-  if ($str_search_day2 > strtotime($records[$i][6])) { //2週間前＋1日の日時まで来たら終了
+  if ($search_day2 > strtotime(str_replace('-','/',$records[$i][4]))) { //2週間前＋1日の日時まで来たら終了
     $cnt_total2 = $second_index - $i; //2-1週間前の症例数を記録
     break;
-  } else { //濃厚接触者の判定
-    if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
-
-    } else if ( preg_match ('/の接触者/', $comment, $matches) ){
-
-    } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
-      
-    } else {
-
-    }
   }
 }
 ?>
