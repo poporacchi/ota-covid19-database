@@ -284,7 +284,8 @@ if(empty($str_last_updated2)){
 
 ?>
 </div>
-<div>
+</div>
+
 <?php
 
 
