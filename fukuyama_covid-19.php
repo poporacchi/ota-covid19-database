@@ -166,8 +166,8 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
 }
 ?>
 <div class="message">
+<h2><a href="https://data.city.fukuyama.hiroshima.jp/dataset/covid19_patients/resource/d0c5baf8-5061-484c-836a-994b322603d6">福山市</a></h2>
 <?php
-echo "<h2>福山市</h2>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
@@ -266,8 +266,8 @@ for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウ
 }
 ?>
 <div class="message">
+<h2><a href="https://hiroshima.stopcovid19.jp">広島県</a></h2>
 <?php
-echo "<h2>広島県</h2>";
 echo "<h3>" . $str_stage_hiroshima . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
 if(empty($str_last_updated2)){
@@ -376,8 +376,8 @@ for ($i = $second_index_okayama; $i>=1; $i--) { //1週間前より前の患者�
 
 ?>
 <div class="message">
+<h2><a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">岡山県</a></h2>
 <?php
-echo "<h2>岡山県</h2>";
 echo "<h3>[" . $str_stage_okayama . "]</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total_okayama . "人";
 if(empty($str_last_updated_okayama)){
