@@ -126,7 +126,6 @@ echo "直近1ヶ月の陽性者リスト<br />";
 //1ヶ月のリスト取得
 echo "<table border=1>";
   echo "<tr>";
-  echo "<th>経路不明</th>";
 foreach ($arry_column as $col) {
   echo "<th>";
   if ($CSV_format == 'SJIS') { //行の先頭列の設定
@@ -140,32 +139,11 @@ foreach ($arry_column as $col) {
   echo "</tr>";
 
   for ($i = $cnt_total_all_period; $i>=1; $i--) {
-    $examday=$records[$i][6];
+    $examday=$records[$i][4];
     if (strtotime('-30 days') > strtotime($examday)) {
 
     } else {
       echo "<tr>";
-      echo "<td>";
-      if ($CSV_format == 'SJIS') {
-        $comment=mb_convert_encoding($records[$i][15], "utf-8", "SJIS");
-      } else {
-        $comment=$records[$i][15];
-      }
-      // 濃厚接触者の判定
-      if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
-      } else if ( preg_match ('/の接触者/', $comment, $matches) ){
-
-      } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
-        if ( preg_match('/県外往来等あり/', $comment, $matches) ) {
-          echo "△"; // 経路不明
-        } else {
-          echo "○"; // 経路不明
-        }
-
-      } else {
-        echo "○"; // 経路不明
-      }
-      echo "</td>";
       foreach ($arry_column as $col) {
         echo "<td>";
         if ($CSV_format == 'SJIS') {
