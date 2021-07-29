@@ -166,50 +166,50 @@ if(empty($str_last_updated)){
                 </div>
                 <?php
 //広島県の更新日の取得
-$target2 = "https://hiroshima.stopcovid19.jp";
-$curl2 = curl_init();
-curl_setopt($curl2, CURLOPT_URL, $target2);
-curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
-$web_page2 = curl_exec($curl2);
-curl_close($curl2);
-$pattern2 = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
-  if( preg_match_all($pattern2, $web_page2 , $result2) ){
-    $last_updated2 = strtotime($result2[2][0]);
-    $str_last_updated2 =date('Y/m/d H時i分',strtotime($result2[2][0]));
+$target_hiroshima = "https://hiroshima.stopcovid19.jp";
+$curl_hiroshima = curl_init();
+curl_setopt($curl_hiroshima, CURLOPT_URL, $target_hiroshima);
+curl_setopt($curl_hiroshima, CURLOPT_RETURNTRANSFER, true);
+$web_page_hiroshima = curl_exec($curl_hiroshima);
+curl_close($curl_hiroshima);
+$pattern_hiroshima = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
+  if( preg_match_all($pattern_hiroshima, $web_page_hiroshima , $result) ){
+    $last_updated_hiroshima = strtotime($result[2][0]);
+    $str_last_updated_hiroshima =date('Y/m/d H時i分',strtotime($result[2][0]));
   }else{
     // エラーの時
-    $last_updated2 = strtotime(date('Y/m/d'));
-    $str_last_updated2='';
+    $last_updated_hiroshima = strtotime(date('Y/m/d'));
+    $str_last_updated_hiroshima='';
   }
 
 //感染状況の取得
-  $pattern3 = '/<h4>感染状況<\/h4>(.*)<p\sdata-v-883a402c>(.*)<\/p>/siU';
-    if( preg_match_all($pattern3, $web_page2 , $result3) ){
-      $str_stage_hiroshima = $result3[2][0];
+  $pattern_hiroshima2 = '/<h4>感染状況<\/h4>(.*)<p\sdata-v-883a402c>(.*)<\/p>/siU';
+    if( preg_match_all($pattern_hiroshima2, $web_page_hiroshima , $result2) ){
+      $str_stage_hiroshima = $result2[2][0];
     }else{
       // エラーの時
       $str_stage_hiroshima='';
     }
 
 //広島県のHPからCSVデータ取得
-$csv2 = file_get_contents("https://www.pref.hiroshima.lg.jp/soshiki_file/brand/covid19/opendata/340006_hiroshima_covid19_01_patients.csv");
+$csv_hiroshima = file_get_contents("https://www.pref.hiroshima.lg.jp/soshiki_file/brand/covid19/opendata/340006_hiroshima_covid19_01_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
-$lines2 = str_getcsv($csv2, "\r\n");
-if (preg_match('/No,/',$lines2[0],$result2)){
+$lines_hiroshima = str_getcsv($csv_hiroshima, "\r\n");
+if (preg_match('/No,/',$lines_hiroshima[0],$result3)){
   //delimiter
-  $delimiter2 = ",";
-  $CSV_format2 = 'SJIS';
+  $delimiter_hiroshima = ",";
+  $CSV_format_hiroshima = 'SJIS';
 } else {
   //delimiter
-  $delimiter2 = "\t";
-  $CSV_format2 = 'SJIS';
+  $delimiter_hiroshima = "\t";
+  $CSV_format_hiroshima = 'SJIS';
 }
-foreach ($lines2 as $line2) {
-  $records2[] = str_getcsv($line2, $delimiter2);
+foreach ($lines_hiroshima as $line2) {
+  $records_hiroshima[] = str_getcsv($line2, $delimiter_hiroshima);
 }
-$cnt2 = count($lines2); // 症例数は$cnt-1
+$cnt_hiroshima = count($lines_hiroshima); // 症例数は$cnt-1
 
-$arry_column2 = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'living'=>7 ,'age'=>9);
+$arry_column_hiroshima = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'living'=>7 ,'age'=>9);
 // 0 No;
 // 4 公表日;
 // 5 発症日;
@@ -218,28 +218,28 @@ $arry_column2 = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'living'=>7
 //9 年齢
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
-$cnt_total_all_period2 = $cnt2 - 1; //トータルの患者数
-if(empty($str_last_updated2)){ //直近1週間の期間を設定
-  $search_day2_1 = strtotime('-7 days');
+$cnt_total_all_period_hiroshima = $cnt2 - 1; //トータルの患者数
+if(empty($str_last_updated_hiroshima)){ //直近1週間の期間を設定
+  $search_day_hiroshima = strtotime('-7 days');
 } else {
-  $search_day2_1 = strtotime(date('Y/m/d',$last_updated2) . '-7 days');
+  $search_day_hiroshima = strtotime(date('Y/m/d',$last_updated_hiroshima) . '-7 days');
 }
-for ($i = $cnt_total_all_period2; $i>=1; $i--) {
-  if ($search_day2_1 > strtotime(str_replace('-','/',$records2[$i][$arry_column2['examin']]))) { //1週間前＋1日の日時まで来たら終了
-    $cnt_total2_1 = $cnt_total_all_period2 - $i; //直近1週間の症例数を記録
-    $second_index2 = $i; //その前の1週間の判定に使用
+for ($i = $cnt_total_all_period_hiroshima; $i>=1; $i--) {
+  if ($search_day_hiroshima> strtotime(str_replace('-','/',$records_hiroshima[$i][$arry_column_hiroshima['examin']]))) { //1週間前＋1日の日時まで来たら終了
+    $cnt_total_hiroshima = $cnt_total_all_period_hiroshima - $i; //直近1週間の症例数を記録
+    $second_index_hiroshima = $i; //その前の1週間の判定に使用
     break;
   } 
 }
 //2-1週間前のデータ
-if(empty($str_last_updated2)){ //2-1週間前の期間を設定
-    $search_day2_2 = strtotime('-14 days');
+if(empty($str_last_updated_hiroshima)){ //2-1週間前の期間を設定
+    $search_day2_hiroshima = strtotime('-14 days');
   } else {
-    $search_day2_2 = strtotime(date('Y/m/d',$last_updated2) . '-14 days');
+    $search_day2_hiroshima = strtotime(date('Y/m/d',$last_updated2) . '-14 days');
   }
-for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウント
-  if ($search_day2_2 > strtotime(str_replace('-','/',$records2[$i][$arry_column2['examin']]))) { //2週間前＋1日の日時まで来たら終了
-    $cnt_total2_2 = $second_index2 - $i; //2-1週間前の症例数を記録
+for ($i = $second_index_hiroshima; $i>=1; $i--) { //1週間前より前の患者のカウント
+  if ($search_day2_hiroshima > strtotime(str_replace('-','/',$records_hiroshima[$i][$arry_column_hiroshima['examin']]))) { //2週間前＋1日の日時まで来たら終了
+    $cnt_total2_hiroshima = $second_index_hiroshima - $i; //2-1週間前の症例数を記録
     break;
   }
 }
@@ -249,28 +249,28 @@ for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウ
 
                     <?php
 if (preg_match('/ステージ1/', $str_stage_hiroshima)) {
-  $h3_id = 'blue';
+  $h3_id_hiroshima = 'blue';
 } else if (preg_match('/ステージ2/', $str_stage_hiroshima)) {
-  $h3_id = 'yellow';
+  $h3_id_hiroshima = 'yellow';
 } else if (preg_match('/ステージ3/', $str_stage_hiroshima)) {
-  $h3_id = 'brown';
+  $h3_id_hiroshima = 'brown';
 } else if (preg_match('/ステージ4/', $str_stage_hiroshima)) {
-  $h3_id = 'pink';
+  $h3_id_hiroshima = 'pink';
 }
 
-echo "<h3 id=\"" . $h3_id . "\">" . $str_stage_hiroshima . "</h3>";
-echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
-if(empty($str_last_updated2)){
+echo "<h3 id=\"" . $h3_id_hiroshima . "\">" . $str_stage_hiroshima . "</h3>";
+echo "<h3>一週間の陽性者数：" . $cnt_total_hiroshima . "人";
+if(empty($str_last_updated_hiroshima)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
-  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated2) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated2) . '-1 day')) . "）<br />";
+  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated_hiroshima) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated_hiroshima) . '-1 day')) . "）<br />";
 }
 
-echo "10万人あたり" . sprintf('%.1f',$cnt_total2_1/28.1) . "人, 先週比：" . (int)(($cnt_total2_1 / $cnt_total2_2) * 100) . "%</h3>";
-if(empty($str_last_updated2)){
+echo "10万人あたり" . sprintf('%.1f',$cnt_total_hiroshima/28.1) . "人, 先週比：" . (int)(($cnt_total_hiroshima / $cnt_total2_hiroshima) * 100) . "%</h3>";
+if(empty($str_last_updated_hiroshima)){
   echo "広島県のデータは毎日午前中に更新されます。<br />";
 } else {
-  echo "最終更新日時：" . $str_last_updated2 . "<br />";
+  echo "最終更新日時：" . $str_last_updated_hiroshima . "<br />";
   echo "広島県のデータは福山市より遅れて更新されます。";
 }
 
