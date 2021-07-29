@@ -218,7 +218,7 @@ $arry_column_hiroshima = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'l
 //9 年齢
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
-$cnt_total_all_period_hiroshima = $cnt2 - 1; //トータルの患者数
+$cnt_total_all_period_hiroshima = $cnt_hiroshima - 1; //トータルの患者数
 if(empty($str_last_updated_hiroshima)){ //直近1週間の期間を設定
   $search_day_hiroshima = strtotime('-7 days');
 } else {
