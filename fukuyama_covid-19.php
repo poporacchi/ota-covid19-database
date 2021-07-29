@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-<title>福山市新型コロナウイルス陽性者数</title>
-<style>
-table {
-  border-collapse: collapse;
-  border: solid 1px black;/*表全体を線で囲う*/
-}
-.base {
-  display: flex;
-  flex-direction: column;
-}
-.upper_base {
-  display: flex;
-  flex-direction: row;
-  height: 680px;
-}
-.lower_base {
-  display: flex;
-  flex-direction: row;
-}
-.message {
-  margin: 10px;
-  padding: 5px;
-  width: 400px;
-  text-align: center;
-  border: solid black medium;
-}
-</style>
-</head>
-<body>
-<!-- 福山市のデータベースから引用 -->
-<!-- 2021/07/26 作成          -->
 
-<?php
+<head>
+    <meta charset="UTF-8">
+    <title>福山市新型コロナウイルス陽性者数</title>
+    <style>
+    table {
+        border-collapse: collapse;
+        border: solid 1px black;
+        /*表全体を線で囲う*/
+    }
+
+    .base {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .upper_base {
+        display: flex;
+        flex-direction: row;
+        height: 680px;
+    }
+
+    .lower_base {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .message {
+        margin: 10px;
+        padding: 5px;
+        width: 400px;
+        text-align: center;
+        border: solid black medium;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 福山市のデータベースから引用 -->
+    <!-- 2021/07/26 作成          -->
+
+    <?php
 //更新日の取得
 $target = "https://data.city.fukuyama.hiroshima.jp/dataset/covid19_information";
 $curl = curl_init();
@@ -52,28 +59,32 @@ $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/si
     $str_last_updated='';
   }
 ?>
-<article>
-<h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
-<div style="text-align:right;">
-  <?php
+    <article>
+        <h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
+        <div style="text-align:right;">
+            <?php
   if(empty($str_last_updated)){
 
   } else {
     echo "最終更新日時：" . $str_last_updated;
   }
-   ?>
-</div>
+?>
+        </div>
 
-<div class="base">
-<div class="upper_base">
-  <iframe width="560" height="500" src="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/cards/details-of-confirmed-cases?embed=true" frameborder="0"></iframe>
-  <iframe width="560" height="660" src="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/cards/number-of-confirmed-cases?embed=true" frameborder="0"></iframe>
-</div>
+        <div class="base">
+            <div class="upper_base">
+                <iframe width="560" height="500"
+                    src="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/cards/details-of-confirmed-cases?embed=true"
+                    frameborder="0"></iframe>
+                <iframe width="560" height="660"
+                    src="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/cards/number-of-confirmed-cases?embed=true"
+                    frameborder="0"></iframe>
+            </div>
 
-<div class="lower_base">
+            <div class="lower_base">
 
-<br />
-<?php
+                <br />
+                <?php
 
 //福山市のHPからCSVデータ取得
 //CSVファイルがtab区切りかつSJISだったり、カンマ区切りかつUTF-8だったりするため、その判別が必要
@@ -134,9 +145,6 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
 }
 $unknown_rate = (int)(($cnt_unknown / $cnt_total) * 100); //経路不明の患者の割合を計算
 
-
-
-
 //2-1週間前のデータ
 if(empty($str_last_updated)){ //2-1週間前の期間を設定
   $search_day2 = strtotime('-14 days');
@@ -165,9 +173,9 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
   }
 }
 ?>
-<div class="message">
-<h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
-<?php
+                <div class="message">
+                    <h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
+                    <?php
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
@@ -184,8 +192,8 @@ if(empty($str_last_updated)){
 }
 
 ?>
-</div>
-<?php
+                </div>
+                <?php
 //広島県の更新日の取得
 $target2 = "https://hiroshima.stopcovid19.jp";
 $curl2 = curl_init();
@@ -265,9 +273,10 @@ for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウ
   }
 }
 ?>
-<div class="message">
-<h2><a href="https://hiroshima.stopcovid19.jp">広島県</a></h2>
-<?php
+                <div class="message">
+                    <h2><a href="https://hiroshima.stopcovid19.jp">広島県</a></h2>
+
+                    <?php
 echo "<h3>" . $str_stage_hiroshima . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
 if(empty($str_last_updated2)){
@@ -285,9 +294,9 @@ if(empty($str_last_updated2)){
 }
 
 ?>
-</div>
+                </div>
 
-<?php
+                <?php
 //岡山県の更新日の取得
 $target_okayama = "http://www.okayama-opendata.jp/opendata/ga130PreAction.action?resourceName=感染者詳細情報&keyTitle=d9c4776db7f09fff161953a2aaf03b80a9abad48&title=新型コロナウイルス感染症に関するデータ（岡山県）&isParam=1&resourceId=d021c012-297e-4ea9-bffa-cf55741884d1&licenseTitle=クリエイティブ・コモンズ+表示&datasetId=e6b3c1d2-2f1f-4735-b36e-e45d36d94761&checkFieldFormat=CSV";
 $curl_okayama = curl_init();
@@ -375,9 +384,10 @@ for ($i = $second_index_okayama; $i>=1; $i--) { //1週間前より前の患者�
 }
 
 ?>
-<div class="message">
-<h2><a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">岡山県</a></h2>
-<?php
+                <div class="message">
+                    <h2><a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">岡山県</a></h2>
+
+                    <?php
 echo "<h3>[" . $str_stage_okayama . "]</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total_okayama . "人";
 if(empty($str_last_updated_okayama)){
@@ -395,11 +405,10 @@ if(empty($str_last_updated_okayama)){
 
 ?>
 
-</div>
-</div>
+                </div>
+            </div>
 
-<?php
-
+            <?php
 
 echo "直近1ヶ月の陽性者リスト<br />";
 //1ヶ月のリスト取得
@@ -465,22 +474,23 @@ foreach ($arry_column as $col) {
   $arr_cnt_pt_by_day=array_count_values($arr_examday);
 ?>
 
-</div>
-</div>
-</div>
-  元データ： <br />
-  広島県：<a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
-  福山市：<a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/" title="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/</a><br />
-  岡山県：<a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou" title="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou</a><br />
-  ソースコード：
-  <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
-</article>
+        </div>
+        </div>
+        </div>
+        元データ：
+        <a href="https://hiroshima.stopcovid19.jp">広島県</a>&nbsp;&nbsp;
+        <a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a>&nbsp;&nbsp;
+        <a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">岡山県</a><br />
+        ソースコード：
+        <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
+    </article>
 
 
-<footer>
-  <hr />
-  <p>&copy;&nbsp;2021&nbsp;大田記念病院感染管理室</p>
-</footer>
+    <footer>
+        <hr />
+        <p>&copy;&nbsp;2021&nbsp;大田記念病院感染管理室</p>
+    </footer>
 
 </body>
+
 </html>
