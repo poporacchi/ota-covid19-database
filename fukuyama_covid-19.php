@@ -369,7 +369,22 @@ for ($i = $second_index_okayama; $i>=1; $i--) { //1週間前より前の患者�
                     <h2><a href="https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou">岡山県</a></h2>
 
                     <?php
-echo "<h3>[" . $str_stage_okayama . "]</h3>";
+
+if (preg_match('/ステージ１/', $str_stage_okayama)) {
+  $h3_id = 'blue';
+  $str_stage_okayama = '[ステージ1] 医療提供体制に特段の支障がない段階';
+} else if (preg_match('/ステージ２/', $str_stage_okayama)) {
+  $h3_id = 'yellow';
+  $str_stage_okayama = '[ステージ2] 感染者の漸増及び医療提供体制への負荷が蓄積する段階';
+} else if (preg_match('/ステージ３/', $str_stage_okayama)) {
+  $h3_id = 'brown';
+  $str_stage_okayama = '[ステージ3] 感染者の急増及び医療提供体制における大きな支障の発生を避けるための対応が必要な段階 ';
+} else if (preg_match('/ステージ４/', $str_stage_okayama)) {
+  $h3_id = 'pink';
+  $str_stage_okayama = '[ステージ4] 爆発的な感染拡大及び深刻な医療提供体制の機能不全を避けるための対応が必要な段階';
+}
+
+echo "<h3 id=\"" . $h3_id . "\">" . $str_stage_okayama . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total_okayama . "人";
 if(empty($str_last_updated_okayama)){
   echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
