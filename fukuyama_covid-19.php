@@ -4,37 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>福山市新型コロナウイルス陽性者数</title>
-    <style>
-    table {
-        border-collapse: collapse;
-        border: solid 1px black;
-        /*表全体を線で囲う*/
-    }
-
-    .base {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .upper_base {
-        display: flex;
-        flex-direction: row;
-        height: 680px;
-    }
-
-    .lower_base {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .message {
-        margin: 10px;
-        padding: 5px;
-        width: 400px;
-        text-align: center;
-        border: solid black medium;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body>
@@ -59,9 +29,11 @@ $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/si
     $str_last_updated='';
   }
 ?>
+
     <article>
         <h2>福山市新型コロナウイルス感染症 簡易まとめ</h2>
         <div style="text-align:right;">
+
             <?php
   if(empty($str_last_updated)){
 
@@ -69,8 +41,8 @@ $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/si
     echo "最終更新日時：" . $str_last_updated;
   }
 ?>
-        </div>
 
+        </div>
         <div class="base">
             <div class="upper_base">
                 <iframe width="560" height="500"
@@ -80,12 +52,10 @@ $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/si
                     src="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/cards/number-of-confirmed-cases?embed=true"
                     frameborder="0"></iframe>
             </div>
-
             <div class="lower_base">
-
                 <br />
-                <?php
 
+                <?php
 //福山市のHPからCSVデータ取得
 //CSVファイルがtab区切りかつSJISだったり、カンマ区切りかつUTF-8だったりするため、その判別が必要
 $csv = file_get_contents("https://data.city.fukuyama.hiroshima.jp/dataset/568687d8-6dc7-4a70-9101-98ff2dda5b28/resource/d0c5baf8-5061-484c-836a-994b322603d6/download/342076_fukuyama_covid19_04_patients.csv");
@@ -104,7 +74,6 @@ foreach ($lines as $line) {
   $records[] = str_getcsv($line, $delimiter);
 }
 $cnt = count($records); // 症例数は$cnt-1
-
 
 $arry_column = array('No'=>0, 'onset'=>5, 'examin'=>6, 'living'=>7, 'age'=>8 ,'symptom'=>12 ,'comment'=>15);
 // 0 No;
@@ -173,14 +142,16 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
   }
 }
 ?>
+
                 <div class="message">
                     <h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
                     <?php
+
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
-  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-1 day')) . "）<br />";
+  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime($str_last_updated . '-1 day')) . "）<br />";
 }
 
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
@@ -282,7 +253,7 @@ echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
 if(empty($str_last_updated2)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
-  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated2) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated2) . '-1 day')) . "）<br />";
+  echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated2) . '-7 days')) . "〜" . date('n/j',strtotime($str_last_updated2 . '-1 day')) . "）<br />";
 }
 
 echo "10万人あたり" . sprintf('%.1f',$cnt_total2_1/28.1) . "人, 先週比：" . (int)(($cnt_total2_1 / $cnt_total2_2) * 100) . "%</h3>";
@@ -407,10 +378,9 @@ if(empty($str_last_updated_okayama)){
 
                 </div>
             </div>
+            福山市の直近1ヶ月の陽性者リスト<br />
 
             <?php
-
-echo "直近1ヶ月の陽性者リスト<br />";
 //1ヶ月のリスト取得
 echo "<table border=1>";
   echo "<tr>";

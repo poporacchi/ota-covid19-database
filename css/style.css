@@ -1,0 +1,29 @@
+table {
+    border-collapse: collapse;
+    border: solid 1px black;
+    /*表全体を線で囲う*/
+}
+
+.base {
+    display: flex;
+    flex-direction: column;
+}
+
+.upper_base {
+    display: flex;
+    flex-direction: row;
+    height: 680px;
+}
+
+.lower_base {
+    display: flex;
+    flex-direction: row;
+}
+
+.message {
+    margin: 10px;
+    padding: 5px;
+    width: 400px;
+    text-align: center;
+    border: solid black medium;
+}
