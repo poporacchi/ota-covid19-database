@@ -147,7 +147,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
                     <h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
                     <?php
 
-echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
+echo "<h3>陽性者数：" . $cnt_total . "人/週";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
@@ -259,7 +259,7 @@ if (preg_match('/ステージ1/', $str_stage_hiroshima)) {
 }
 
 echo "<h3 id=\"" . $h3_id_hiroshima . "\">" . $str_stage_hiroshima . "</h3>";
-echo "<h3>一週間の陽性者数：" . $cnt_total_hiroshima . "人";
+echo "<h3>陽性者数：" . $cnt_total_hiroshima . "人/週";
 if(empty($str_last_updated_hiroshima)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
@@ -385,7 +385,7 @@ if (preg_match('/ステージ１/', $str_stage_okayama)) {
 }
 
 echo "<h3 id=\"" . $h3_id_okayama . "\">" . $str_stage_okayama . "</h3>";
-echo "<h3>一週間の陽性者数：" . $cnt_total_okayama . "人";
+echo "<h3>陽性者数：" . $cnt_total_okayama . "人/週";
 if(empty($str_last_updated_okayama)){
   echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
 } else {
