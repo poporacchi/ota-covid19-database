@@ -27,3 +27,20 @@ table {
     text-align: center;
     border: solid black medium;
 }
+
+/*カラーマーカー*/
+#blue {
+    background: linear-gradient(transparent 60%, #6cf 60%);
+}
+
+#yellow {
+    background: linear-gradient(transparent 60%, #ff6 60%);
+}
+
+#brown {
+    background: linear-gradient(transparent 60%, #c60 60%);
+}
+
+#pink {
+    background: linear-gradient(transparent 60%, #f66 60%);
+}

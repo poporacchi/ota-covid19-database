@@ -248,7 +248,17 @@ for ($i = $second_index2; $i>=1; $i--) { //1週間前より前の患者のカウ
                     <h2><a href="https://hiroshima.stopcovid19.jp">広島県</a></h2>
 
                     <?php
-echo "<h3>" . $str_stage_hiroshima . "</h3>";
+if (preg_match('/ステージ1/', $str_stage_hiroshima)) {
+  $h3_id = 'blue';
+} else if (preg_match('/ステージ2/', $str_stage_hiroshima)) {
+  $h3_id = 'yellow';
+} else if (preg_match('/ステージ3/', $str_stage_hiroshima)) {
+  $h3_id = 'brown';
+} else if (preg_match('/ステージ4/', $str_stage_hiroshima)) {
+  $h3_id = 'pink';
+}
+
+echo "<h3 id=\"" . $h3_id . "\">" . $str_stage_hiroshima . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total2_1 . "人";
 if(empty($str_last_updated2)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
