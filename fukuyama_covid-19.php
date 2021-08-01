@@ -283,7 +283,8 @@ echo "10万人あたり" . sprintf('%.1f',$cnt_total_hiroshima/28.1) . "人, 先
 
 if ($cnt_total_onomichi != 0) {
   echo "尾道市陽性者数：" . $cnt_total_onomichi . "人/週（" . sprintf('%.1f', $cnt_total_onomichi/1.38) . "/10万人）<br />";
-} else if ($cnt_total_mihara != 0) {
+} 
+if ($cnt_total_mihara != 0) {
   echo "三原市陽性者数：" . $cnt_total_mihara . "人/週（" . sprintf('%.1f', $cnt_total_mihara/0.96) . "/10万人）<br />";
 }
 
