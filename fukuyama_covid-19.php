@@ -22,10 +22,10 @@ curl_close($curl);
 $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
     $last_updated = strtotime($result[1][0]);
-    $str_last_updated=date('Y/m/d H時i分',strtotime($result[1][0]));
+    $str_last_updated=date('Y/n/j H時i分',strtotime($result[1][0]));
   }else{
     // エラーの時
-    $last_updated = strtotime(date('Y/m/d'));
+    $last_updated = strtotime(date('Y/n/j'));
     $str_last_updated='';
   }
 ?>
@@ -175,10 +175,10 @@ curl_close($curl_hiroshima);
 $pattern_hiroshima = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU';
   if( preg_match_all($pattern_hiroshima, $web_page_hiroshima , $result) ){
     $last_updated_hiroshima = strtotime($result[2][0]);
-    $str_last_updated_hiroshima =date('Y/m/d H時i分',strtotime($result[2][0]));
+    $str_last_updated_hiroshima =date('Y/n/j H時i分',strtotime($result[2][0]));
   }else{
     // エラーの時
-    $last_updated_hiroshima = strtotime(date('Y/m/d'));
+    $last_updated_hiroshima = strtotime(date('Y/n/j'));
     $str_last_updated_hiroshima='';
   }
 
