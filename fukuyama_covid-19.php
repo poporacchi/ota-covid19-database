@@ -219,6 +219,8 @@ $arry_column_hiroshima = array('No'=>0, 'examin'=>4, 'onset'=>5, 'center'=>6, 'l
 date_default_timezone_set('Asia/Tokyo');
 //1週間のデータ
 $cnt_total_all_period_hiroshima = $cnt_hiroshima - 1; //トータルの患者数
+$cnt_total_mihara = 0;
+$cnt_total_onomichi = 0;
 if(empty($str_last_updated_hiroshima)){ //直近1週間の期間を設定
   $search_day1_hiroshima = strtotime('-7 days');
 } else {
@@ -229,7 +231,13 @@ for ($i = $cnt_total_all_period_hiroshima; $i>=1; $i--) {
     $cnt_total_hiroshima = $cnt_total_all_period_hiroshima - $i; //直近1週間の症例数を記録
     $second_index_hiroshima = $i; //その前の1週間の判定に使用
     break;
-  } 
+  } else {
+    if($records_hiroshima[$i][$arry_column_hiroshima['living']]=='三原市') {
+      $cnt_total_mihara++;
+    } else if($records_hiroshima[$i][$arry_column_hiroshima['living']]=='尾道市') {
+      $cnt_total_onomichi++;
+    }
+  }
 }
 //2-1週間前のデータ
 if(empty($str_last_updated_hiroshima)){ //2-1週間前の期間を設定
@@ -259,7 +267,7 @@ if (preg_match('/ステージ1/', $str_stage_hiroshima)) {
 }
 
 echo "<h3 id=\"" . $h3_id_hiroshima . "\">" . $str_stage_hiroshima . "</h3>";
-echo "<h3>陽性者数：" . $cnt_total_hiroshima . "人/週";
+echo "<h3>広島県陽性者数：" . $cnt_total_hiroshima . "人/週";
 if(empty($str_last_updated_hiroshima)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
@@ -267,6 +275,13 @@ if(empty($str_last_updated_hiroshima)){
 }
 
 echo "10万人あたり" . sprintf('%.1f',$cnt_total_hiroshima/28.1) . "人, 先週比：" . (int)(($cnt_total_hiroshima / $cnt_total2_hiroshima) * 100) . "%</h3>";
+
+if ($cnt_total_onomichi != 0) {
+  echo "尾道市陽性者数：" . $cnt_total_onomichi . "人/週（" . $cnt_total_onomichi/1.38 . "/10万人）<br />";
+} else if ($cnt_total_mihara != 0) {
+  echo "三原市陽性者数：" . $cnt_total_mihara . "人/週（" . $cnt_total_mihara/0.96 . "/10万人）<br />";
+}
+
 if(empty($str_last_updated_hiroshima)){
   echo "広島県のデータは毎日午前中に更新されます。<br />";
 } else {
