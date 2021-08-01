@@ -147,7 +147,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
                     <h2><a href="https://usecase.data.city.fukuyama.hiroshima.jp/covid-19/">福山市</a></h2>
                     <?php
 
-echo "<h3>陽性者数：" . $cnt_total . "人/週";
+echo "<h3>福山市陽性者数：" . $cnt_total . "人/週";
 if(empty($str_last_updated)){
   echo "（" . date('n/j',strtotime('-7 days')) . "〜" . date('n/j',strtotime('-1 day')) . "）<br />";
 } else {
@@ -232,9 +232,14 @@ for ($i = $cnt_total_all_period_hiroshima; $i>=1; $i--) {
     $second_index_hiroshima = $i; //その前の1週間の判定に使用
     break;
   } else {
-    if($records_hiroshima[$i][$arry_column_hiroshima['living']]=='三原市') {
+    if ($CSV_format_hiroshima == 'SJIS') { //コメント行の取得
+      $living_area=mb_convert_encoding($records_hiroshima[$i][$arry_column_hiroshima['living']], "utf-8", "SJIS");
+    } else {
+      $living_area=$records_hiroshima[$i][$arry_column_hiroshima['living']];
+    }
+    if($living_area=='三原市') {
       $cnt_total_mihara++;
-    } else if($records_hiroshima[$i][$arry_column_hiroshima['living']]=='尾道市') {
+    } else if($living_area=='尾道市') {
       $cnt_total_onomichi++;
     }
   }
@@ -400,7 +405,7 @@ if (preg_match('/ステージ１/', $str_stage_okayama)) {
 }
 
 echo "<h3 id=\"" . $h3_id_okayama . "\">" . $str_stage_okayama . "</h3>";
-echo "<h3>陽性者数：" . $cnt_total_okayama . "人/週";
+echo "<h3>岡山県陽性者数：" . $cnt_total_okayama . "人/週";
 if(empty($str_last_updated_okayama)){
   echo "（" . date('n/j',strtotime('-6 days')) . "〜" . date('n/j') . "）<br />";
 } else {
