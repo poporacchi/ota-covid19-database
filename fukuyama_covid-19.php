@@ -279,7 +279,7 @@ if(empty($str_last_updated_hiroshima)){
   echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated_hiroshima) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated_hiroshima) . '-1 day')) . "）<br />";
 }
 
-echo "10万人あたり" . sprintf('%.1f',$cnt_total_hiroshima/28.1) . "人, 先週比：" . (int)(($cnt_total_hiroshima / $cnt_total2_hiroshima) * 100);
+echo "10万人あたり" . sprintf('%.1f',$cnt_total_hiroshima/28.1) . "人, 先週比：" . (int)(($cnt_total_hiroshima / $cnt_total2_hiroshima) * 100) . "%<br />";
 
 if ($cnt_total_onomichi != 0) {
   echo "尾道市陽性者数：" . $cnt_total_onomichi . "人/週（" . sprintf('%.1f', $cnt_total_onomichi/1.38) . "/10万人）<br />";
