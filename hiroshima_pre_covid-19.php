@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-<title>広島県新型コロナウイルス陽性者数</title>
-<style>
-table {
-  border-collapse: collapse;
-  border: solid 1px black;/*表全体を線で囲う*/
-}
-.base {
-  display: flex;
-  flex-direction: column;
-}
-.upper_base {
-  display: flex;
-  flex-direction: row;
-  height: 680px;
-}
-.lower_base {
-  display: flex;
-  flex-direction: row;
-}
-.message {
-  margin: 10px;
-  padding: 5px;
-  width: 400px;
-  text-align: center;
-  border: solid black medium;
-}
-</style>
-</head>
-<body>
-<!-- 広島県のデータベースから引用 -->
-<!-- 2021/07/28 作成          -->
 
-<?php
+<head>
+    <meta charset="UTF-8">
+    <title>広島県新型コロナウイルス陽性者数</title>
+    <style>
+    table {
+        border-collapse: collapse;
+        border: solid 1px black;
+        /*表全体を線で囲う*/
+    }
+
+    .base {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .upper_base {
+        display: flex;
+        flex-direction: row;
+        height: 680px;
+    }
+
+    .lower_base {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .message {
+        margin: 10px;
+        padding: 5px;
+        width: 400px;
+        text-align: center;
+        border: solid black medium;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 広島県のデータベースから引用 -->
+    <!-- 2021/07/28 作成          -->
+
+    <?php
 //更新日の取得
 $target = "https://hiroshima.stopcovid19.jp";
 $curl = curl_init();
@@ -63,24 +70,24 @@ $pattern = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548e859e>/siU
 ?>
 
 
-<article>
-<h2>広島県新型コロナウイルス感染症 簡易まとめ</h2>
-<div style="text-align:right;">
-  <?php
+    <article>
+        <h2>広島県新型コロナウイルス感染症 簡易まとめ</h2>
+        <div style="text-align:right;">
+            <?php
   if(empty($str_last_updated)){
 
   } else {
     echo "最終更新日時：" . $str_last_updated;
   }
    ?>
-</div>
+        </div>
 
-<div class="base">
+        <div class="base">
 
-<div class="lower_base">
-<div>
-<br />
-<?php
+            <div class="lower_base">
+                <div>
+                    <br />
+                    <?php
 
 //広島県のHPからCSVデータ取得
 //CSVファイルがtab区切りかつSJISだったり、カンマ区切りかつUTF-8だったりするため、その判別が必要
@@ -117,14 +124,18 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
   $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
 }
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  if ($search_day1 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //1週間前＋1日の日時まで来たら終了
+  if ($records_hiroshima[$i][$arry_column_hiroshima['examin']]=='-') {
+    //変なデータはスキップ
+  } else if ($search_day1 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
     $second_index = $i; //その前の1週間の判定に使用
     break;
   } 
 }
 //2-1週間前のデータ
-if(empty($str_last_updated)){ //2-1週間前の期間を設定
+if ($records_hiroshima[$i][$arry_column_hiroshima['examin']]=='-') {
+  //変なデータはスキップ
+} else if(empty($str_last_updated)){ //2-1週間前の期間を設定
     $search_day2 = strtotime('-14 days');
   } else {
     $search_day2 = strtotime(date('Y/m/d',$last_updated) . '-14 days');
@@ -136,8 +147,8 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
   }
 }
 ?>
-<div class="message">
-<?php
+                    <div class="message">
+                        <?php
 echo "<h2>広島県</h2>";
 echo "<h3>" . $str_stage . "</h3>";
 echo "<h3>一週間の陽性者数：" . $cnt_total . "人";
@@ -150,8 +161,8 @@ echo "10万人あたり" . sprintf('%.1f',$cnt_total/28.1) . "人, 先週比："
 
 
 ?>
-</div>
-<?php
+                    </div>
+                    <?php
 
 
 echo "直近1ヶ月の陽性者リスト<br />";
@@ -206,20 +217,22 @@ foreach ($arry_column as $col) {
   $arr_cnt_pt_by_day=array_count_values($arr_examday);
 ?>
 
-</div>
-</div>
-</div>
-  元データ： <br />
-  <a href="https://hiroshima.stopcovid19.jp" title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
-  解析方法：
-  <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
-</article>
+                </div>
+            </div>
+        </div>
+        元データ： <br />
+        <a href="https://hiroshima.stopcovid19.jp"
+            title="https://hiroshima.stopcovid19.jp">https://hiroshima.stopcovid19.jp</a><br />
+        解析方法：
+        <a href="https://github.com/poporacchi/ota-covid19-database" title="GitHub">GitHub</a>
+    </article>
 
 
-<footer>
-  <hr />
-  <p>©️ 2021 大田記念病院感染管理室</p>
-</footer>
+    <footer>
+        <hr />
+        <p>©️ 2021 大田記念病院感染管理室</p>
+    </footer>
 
 </body>
+
 </html>
