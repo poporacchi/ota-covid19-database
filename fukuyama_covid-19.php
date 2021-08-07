@@ -228,7 +228,7 @@ foreach ($cnt_symptom as $key => $count){
     } else if ($key=='muscle') {
       $str_symptom = '筋肉痛';
     } else if ($key=='arthralgia') {
-      $str_symptom = '関節';
+      $str_symptom = '関節痛';
     } else if ($key=='diarrhea') {
       $str_symptom = '下痢';
     }  
@@ -239,7 +239,7 @@ echo "<br />";
 if(empty($str_last_updated)){
   echo "市のデータは毎日夕方に更新されます。<br />";
 } else {
-  echo "最終更新日時：" . $str_last_updated;
+  echo "更新日時：" . $str_last_updated;
 }
 
 ?>
@@ -376,7 +376,7 @@ echo "</h3>";
 if(empty($str_last_updated_hiroshima)){
   echo "広島県のデータは毎日午前中に更新されます。<br />";
 } else {
-  echo "最終更新日時：" . $str_last_updated_hiroshima . "<br />";
+  echo "更新日時：" . $str_last_updated_hiroshima . "<br />";
   echo "広島県のデータは福山市より遅れて更新されます。<br />";
   echo "感染状況のステージについては反映が１週間遅れることがあります。";
 }
@@ -503,7 +503,7 @@ echo "10万人あたり" . sprintf('%.1f',$cnt_total_okayama/19) . "人, 先週�
 if(empty($str_last_updated_okayama)){
     echo "岡山のデータは毎日夕方に更新されます。<br />";
   } else {
-    echo "最終更新日時：" . $str_last_updated_okayama ."<br/>";
+    echo "更新日時：" . $str_last_updated_okayama ."<br/>";
   }
 echo "感染状況のステージについては反映が１週間遅れることがあります。";
 ?>
