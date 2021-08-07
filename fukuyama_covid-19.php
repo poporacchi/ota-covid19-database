@@ -61,12 +61,10 @@ $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/si
 $csv = file_get_contents("https://data.city.fukuyama.hiroshima.jp/dataset/568687d8-6dc7-4a70-9101-98ff2dda5b28/resource/d0c5baf8-5061-484c-836a-994b322603d6/download/342076_fukuyama_covid19_04_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
 $lines = str_getcsv($csv, "\r\n");
-if (preg_match('/No,/',$lines[0],$result)){
-  //delimiterがカンマ区切りは文字コードはUTF-8と思われる。
+if (mb_detect_encoding($lines[0])=='UTF-8'){
   $delimiter = ",";
   $CSV_format = 'UTF-8';
 } else {
-  //delimiterがカンマ区切りでない（タブ区切り）は文字コードはSJISと思われる。
   $delimiter = "\t";
   $CSV_format = 'SJIS';
 }
@@ -275,15 +273,9 @@ $pattern_hiroshima = '/最終更新<\/span>(.*)<time datetime=\"(.*)" data-v-548
 $csv_hiroshima = file_get_contents("https://www.pref.hiroshima.lg.jp/soshiki_file/brand/covid19/opendata/340006_hiroshima_covid19_01_patients.csv");
 setlocale( LC_ALL, 'ja_JP' );
 $lines_hiroshima = str_getcsv($csv_hiroshima, "\r\n");
-if (preg_match('/No,/',$lines_hiroshima[0],$result3)){
-  //delimiter
-  $delimiter_hiroshima = ",";
-  $CSV_format_hiroshima = 'SJIS';
-} else {
-  //delimiter
-  $delimiter_hiroshima = "\t";
-  $CSV_format_hiroshima = 'SJIS';
-}
+$CSV_format_hiroshima = mb_detect_encoding($lines_hiroshima[0],"SJIS, UTF-8");
+$delimiter_hiroshima = ",";
+//$delimiter_okayama = "\t";
 foreach ($lines_hiroshima as $line2) {
   $records_hiroshima[] = str_getcsv($line2, $delimiter_hiroshima);
 }
@@ -425,15 +417,9 @@ if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama2) ){
 $csv_okayama = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
 setlocale( LC_ALL, 'ja_JP' );
 $lines_okayama = str_getcsv($csv_okayama, "\r\n");
-if (preg_match('/330001,/',$lines_okayama[1],$result_okayama)){
-  //delimiter
-  $delimiter_okayama = ",";
-  $CSV_format_okayama = 'SJIS';
-} else {$
-  //delimiter
-  $delimiter_okayama = "\t";
-  $CSV_format_okayama = 'SJIS';
-}
+$CSV_format_okayama = mb_detect_encoding($lines_okayama[0],"SJIS, UTF-8");
+$delimiter_okayama = ",";
+//$delimiter_okayama = "\t";
 foreach ($lines_okayama as $line) {
   $records_okayama[] = str_getcsv($line, $delimiter_okayama);
 }
