@@ -21,8 +21,8 @@ $web_page = curl_exec($curl);
 curl_close($curl);
 $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
-    $last_updated = strtotime($result[1][0] . '+9 hour');
-    $str_last_updated=date('Y/n/j H時i分',strtotime($result[1][0] . '+9 hour'));
+    $last_updated = strtotime($result[1][0]);
+    $str_last_updated=date('Y/n/j H時i分',strtotime($result[1][0]));
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/n/j'));
