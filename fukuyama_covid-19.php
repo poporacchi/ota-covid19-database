@@ -92,11 +92,12 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
 //症状の累計
 $arry_column_symptom = array('fever'=>0, 'cough'=>1, 'stuffy'=>2, 'nasal'=>3, 'throat'=>4 ,'headache'=>5, 'fatigue'=>6, 'diarrhea'=>7, 'muscle'=>8, 'arthralgia'=>9, 'nosymptom'=>10);
 $arry_key_symptom = array_keys($arry_column_symptom); //キー名の配列
-
 $cnt_symptom = array();
 for ($i=0;$i<count($arry_key_symptom);$i++){
   $cnt_symptom[$arry_key_symptom[$i]]=0;
 }
+//濃厚接触者の判定
+//症状の累計
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
   if ($CSV_format == 'SJIS') { //コメント行の取得
     $comment=mb_convert_encoding($records[$i][$arry_column['comment']], "utf-8", "SJIS");
@@ -175,17 +176,7 @@ for ($i = $second_index; $i>=1; $i--) { //1週間前より前の患者のカウ�
   if ($search_day2 > strtotime($records[$i][$arry_column['examin']])) { //2週間前＋1日の日時まで来たら終了
     $cnt_total2 = $second_index - $i; //2-1週間前の症例数を記録
     break;
-  } else { //濃厚接触者の判定
-    if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
-
-    } else if ( preg_match ('/の接触者/', $comment, $matches) ){
-
-    } else if ( preg_match ('/他事例との関連調査中/', $comment, $matches) ){
-      
-    } else {
-
-    }
-  }
+  } 
 }
 ?>
 
@@ -306,7 +297,7 @@ for ($i = $cnt_total_all_period_hiroshima; $i>=1; $i--) {
     $second_index_hiroshima = $i; //その前の1週間の判定に使用
     break;
   } else {
-    if ($CSV_format_hiroshima == 'SJIS') { //コメント行の取得
+    if ($CSV_format_hiroshima == 'SJIS') { //居住地の取得
       $living_area=mb_convert_encoding($records_hiroshima[$i][$arry_column_hiroshima['living']], "utf-8", "SJIS");
     } else {
       $living_area=$records_hiroshima[$i][$arry_column_hiroshima['living']];
@@ -337,6 +328,7 @@ for ($i = $second_index_hiroshima; $i>=1; $i--) { //1週間前より前の患者
                     <h2><a href="https://hiroshima.stopcovid19.jp">広島県</a></h2>
 
                     <?php
+//感染状況のステージ取得
 if (preg_match('/ステージ1/', $str_stage_hiroshima)) {
   $h3_id_hiroshima = 'blue';
 } else if (preg_match('/ステージ2/', $str_stage_hiroshima)) {
@@ -386,6 +378,7 @@ $web_page_okayama = curl_exec($curl_okayama);
 curl_close($curl_okayama);
 $pattern_okayama = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
   if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama) ){
+    //更新日がハイフン区切りのため文字列を置換
     $str_date = $result_okayama[2][0];
     $str_date = str_replace('年','/',$str_date);
     $str_date = str_replace('月','/',$str_date);
