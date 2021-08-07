@@ -124,7 +124,7 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
   $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
 }
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
-  if ($records_hiroshima[$i][$arry_column_hiroshima['examin']]=='-') {
+  if ($records[$i][$arry_column['examin']]=='-') {
     //変なデータはスキップ
   } else if ($search_day1 > strtotime(str_replace('-','/',$records[$i][$arry_column['examin']]))) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
@@ -133,7 +133,7 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
   } 
 }
 //2-1週間前のデータ
-if ($records_hiroshima[$i][$arry_column_hiroshima['examin']]=='-') {
+if ($records[$i][$arry_column['examin']]=='-') {
   //変なデータはスキップ
 } else if(empty($str_last_updated)){ //2-1週間前の期間を設定
     $search_day2 = strtotime('-14 days');
