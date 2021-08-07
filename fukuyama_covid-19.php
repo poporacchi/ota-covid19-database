@@ -92,7 +92,7 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
   $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
 }
 //症状の累計
-$arry_column_symptom = array('fever'=>0, 'cough'=>1, 'stuffy'=>2, 'nasal'=>3, 'throat'=>4 ,'headache'=>5, 'fatigue'=>6, 'diarrhea'=>7, 'muscle'=>8, 'nosymptom'=>9);
+$arry_column_symptom = array('fever'=>0, 'cough'=>1, 'stuffy'=>2, 'nasal'=>3, 'throat'=>4 ,'headache'=>5, 'fatigue'=>6, 'diarrhea'=>7, 'muscle'=>8, 'arthralgia'=>9, 'nosymptom'=>10);
 $arry_key_symptom = array_keys($arry_column_symptom); //キー名の配列
 
 $cnt_symptom = array();
@@ -142,6 +142,9 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
     }
     if (preg_match('/筋肉痛/',$symptom,$result)){
       $cnt_symptom['muscle']++;
+    }
+    if (preg_match('/関節痛/',$symptom,$result)){
+      $cnt_symptom['arthralgia']++;
     }
     if (preg_match('/なし/',$symptom,$result)){
       $cnt_symptom['nosymptom']++;
@@ -224,6 +227,8 @@ foreach ($cnt_symptom as $key => $count){
       $str_symptom = '呼吸苦';
     } else if ($key=='muscle') {
       $str_symptom = '筋肉痛';
+    } else if ($key=='arthralgia') {
+      $str_symptom = '関節痛';
     } else if ($key=='diarrhea') {
       $str_symptom = '下痢';
     }  
