@@ -378,7 +378,7 @@ if(empty($str_last_updated_hiroshima)){
 } else {
   echo "更新日時：" . $str_last_updated_hiroshima . "<br />";
   echo "広島県のデータは福山市より遅れて更新されます。<br />";
-  echo "感染状況のステージについては反映が１週間遅れることがあります。";
+  echo "感染状況のステージの反映は１週間遅れることがあります。";
 }
 
 ?>
@@ -505,7 +505,7 @@ if(empty($str_last_updated_okayama)){
   } else {
     echo "更新日時：" . $str_last_updated_okayama ."<br/>";
   }
-echo "感染状況のステージについては反映が１週間遅れることがあります。";
+echo "感染状況のステージの反映は１週間遅れることがあります。";
 ?>
 
                 </div>
