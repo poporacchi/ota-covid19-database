@@ -143,7 +143,7 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
     if (preg_match('/筋肉痛/',$symptom,$result)){
       $cnt_symptom['muscle']++;
     }
-    if (preg_match('/関節痛/',$symptom,$result)){
+    if (preg_match('/関節/',$symptom,$result)){
       $cnt_symptom['arthralgia']++;
     }
     if (preg_match('/なし/',$symptom,$result)){
@@ -228,7 +228,7 @@ foreach ($cnt_symptom as $key => $count){
     } else if ($key=='muscle') {
       $str_symptom = '筋肉痛';
     } else if ($key=='arthralgia') {
-      $str_symptom = '関節痛';
+      $str_symptom = '関節';
     } else if ($key=='diarrhea') {
       $str_symptom = '下痢';
     }  
