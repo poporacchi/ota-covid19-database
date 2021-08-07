@@ -21,8 +21,8 @@ $web_page = curl_exec($curl);
 curl_close($curl);
 $pattern = '/<span\sclass=\"automatic-local-datetime\" data-datetime=\"(.*)">/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
-    $last_updated = strtotime($result[1][0]);
-    $str_last_updated=date('Y/n/j H時i分',strtotime($result[1][0]));
+    $last_updated = strtotime($result[1][0] . '+9 hour');
+    $str_last_updated=date('Y/n/j H時i分',strtotime($result[1][0] . '+9 hour'));
   }else{
     // エラーの時
     $last_updated = strtotime(date('Y/n/j'));
@@ -91,17 +91,62 @@ if(empty($str_last_updated)){ //直近1週間の期間を設定
 } else {
   $search_day1 = strtotime(date('Y/m/d',$last_updated) . '-7 days');
 }
+//症状の累計
+$arry_column_symptom = array('fever'=>0, 'cough'=>1, 'stuffy'=>2, 'nasal'=>3, 'throat'=>4 ,'headache'=>5, 'fatigue'=>6, 'diarrhea'=>7, 'muscle'=>8, 'nosymptom'=>9);
+$arry_key_symptom = array_keys($arry_column_symptom); //キー名の配列
+
+$cnt_symptom = array();
+for ($i=0;$i<count($arry_key_symptom);$i++){
+  $cnt_symptom[$arry_key_symptom[$i]]=0;
+}
 for ($i = $cnt_total_all_period; $i>=1; $i--) {
   if ($CSV_format == 'SJIS') { //コメント行の取得
     $comment=mb_convert_encoding($records[$i][$arry_column['comment']], "utf-8", "SJIS");
+    $symptom=mb_convert_encoding($records[$i][$arry_column['symptom']], "utf-8", "SJIS");
   } else {
     $comment=$records[$i][$arry_column['comment']];
+    $symptom=$records[$i][$arry_column['symptom']];
   }
   if ($search_day1 > strtotime($records[$i][$arry_column['examin']])) { //1週間前＋1日の日時まで来たら終了
     $cnt_total = $cnt_total_all_period - $i; //直近1週間の症例数を記録
     $second_index = $i; //その前の1週間の判定に使用
     break;
-  } else { //濃厚接触者の判定
+  } else { 
+    
+    if (preg_match('/熱/',$symptom,$result)){
+      $cnt_symptom['fever']++;
+    }
+    if (preg_match('/咳/',$symptom,$result)){
+      $cnt_symptom['cough']++;
+    }
+    if (preg_match('/息苦しさ/',$symptom,$result)){
+      $cnt_symptom['stuffy']++;
+    }
+    if (preg_match('/呼吸苦/',$symptom,$result)){
+      $cnt_symptom['stuffy']++;
+    }
+    if (preg_match('/鼻/',$symptom,$result)){
+      $cnt_symptom['nasal']++;
+    }
+    if (preg_match('/咽頭痛/',$symptom,$result)){
+      $cnt_symptom['throat']++;
+    }
+    if (preg_match('/頭痛/',$symptom,$result)){
+      $cnt_symptom['headache']++;
+    }
+    if (preg_match('/倦怠感/',$symptom,$result)){
+      $cnt_symptom['fatigue']++;
+    }
+    if (preg_match('/下痢/',$symptom,$result)){
+      $cnt_symptom['diarrhea']++;
+    }
+    if (preg_match('/筋肉痛/',$symptom,$result)){
+      $cnt_symptom['muscle']++;
+    }
+    if (preg_match('/なし/',$symptom,$result)){
+      $cnt_symptom['nosymptom']++;
+    }
+    //濃厚接触者の判定
     if ( preg_match('/濃厚接触者/', $comment, $matches) ) {
     } else if ( preg_match ('/の接触者/', $comment, $matches) ){
 
@@ -153,9 +198,39 @@ if(empty($str_last_updated)){
 } else {
   echo "（" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-7 days')) . "〜" . date('n/j',strtotime(date('Y/m/d',$last_updated) . '-1 day')) . "）<br />";
 }
-
 echo "（うち経路不明：" . $cnt_unknown . "人, " . $unknown_rate. "%）<br />";
 echo "10万人あたり" . sprintf('%.1f',$cnt_total/4.6) . "人, 先週比：" . (int)(($cnt_total / $cnt_total2) * 100) . "%</h3>";
+
+//症状を降順に並び変える
+echo "直近１週間の陽性者の症状（降順）<br />";
+arsort($cnt_symptom);
+foreach ($cnt_symptom as $key => $count){
+  if ($count != 0) {
+    if ($key=='fever') {
+      $str_symptom = '発熱';
+    } else if ($key=='headache') {
+      $str_symptom = '頭痛';
+    } else if ($key=='cough') {
+      $str_symptom = '咳';
+    } else if ($key=='throat') {
+      $str_symptom = '咽頭痛';
+    } else if ($key=='fatigue') {
+      $str_symptom = '倦怠感';
+    } else if ($key=='nasal') {
+      $str_symptom = '鼻汁・鼻閉';
+    } else if ($key=='nosymptom') {
+      $str_symptom = '無症状';
+    } else if ($key=='stuffy') {
+      $str_symptom = '呼吸苦';
+    } else if ($key=='muscle') {
+      $str_symptom = '筋肉痛';
+    } else if ($key=='diarrhea') {
+      $str_symptom = '下痢';
+    }  
+    echo $str_symptom . " (" . sprintf('%.1f',$count/$cnt_total*100) . "%)<br />";
+  }
+}
+echo "<br />";
 if(empty($str_last_updated)){
   echo "市のデータは毎日夕方に更新されます。<br />";
 } else {
@@ -297,7 +372,8 @@ if(empty($str_last_updated_hiroshima)){
   echo "広島県のデータは毎日午前中に更新されます。<br />";
 } else {
   echo "最終更新日時：" . $str_last_updated_hiroshima . "<br />";
-  echo "広島県のデータは福山市より遅れて更新されます。";
+  echo "広島県のデータは福山市より遅れて更新されます。<br />";
+  echo "感染状況のステージについては反映が１週間遅れることがあります。";
 }
 
 ?>
@@ -424,7 +500,7 @@ if(empty($str_last_updated_okayama)){
   } else {
     echo "最終更新日時：" . $str_last_updated_okayama ."<br/>";
   }
-echo "岡山県の感染状況のステージについては反映が１週間遅れることがあります。";
+echo "感染状況のステージについては反映が１週間遅れることがあります。";
 ?>
 
                 </div>
