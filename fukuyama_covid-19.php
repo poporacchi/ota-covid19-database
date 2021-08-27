@@ -132,6 +132,7 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
     }
     if (preg_match_all('/頭痛/',$symptom,$result)){
       if (count($result)==2) {
+        //頭痛という単語が頭痛と咽頭痛２つ含まれる時
         $cnt_symptom['headache']++;
       } else {
         if (preg_match('/咽頭痛/',$symptom,$result)){
