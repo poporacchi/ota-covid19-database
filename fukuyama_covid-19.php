@@ -134,8 +134,10 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
         $cnt_symptom['headache']++;
       } else {
         if (preg_match('/咽頭痛/',$symptom,$result)){
+          //頭痛ではなく咽頭痛のとき
           $cnt_symptom['throat']++;
         } else {
+          //咽頭痛ではなく頭痛の単語のとき
           $cnt_symptom['headache']++;
         }
       }
