@@ -130,8 +130,17 @@ for ($i = $cnt_total_all_period; $i>=1; $i--) {
     if (preg_match('/咽頭痛/',$symptom,$result)){
       $cnt_symptom['throat']++;
     }
-    if (preg_match('/頭痛/',$symptom,$result)){
-      $cnt_symptom['headache']++;
+    if (preg_match_all('/頭痛/',$symptom,$result)){
+      if (count($result)==2) {
+        $cnt_symptom['headache']++;
+      } else {
+        if (preg_match('/咽頭痛/',$symptom,$result)){
+          //頭痛という単語が咽頭痛だけにマッチする場合スキップ
+        } else {
+          $cnt_symptom['headache']++;
+        }
+      }
+      
     }
     if (preg_match('/倦怠感/',$symptom,$result)){
       $cnt_symptom['fatigue']++;
