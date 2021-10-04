@@ -81,9 +81,9 @@ curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
 $web_page2 = curl_exec($curl2);
 curl_close($curl2);
 //$pattern2 = '/<strong>総合的判断：(.*)<\/strong>/siU';
-$pattern2 = '/<a\shref=\"#02-kennaijoukyou-iryoutaisei\">県内の医療提供体制及び感染の状況等<\/a>(.*)<br\/><a href=\"#2-kanjahassei\">/siU';
+$pattern2 = '/kennaijoukyou-iryoutaisei\">(.*)<\/a>(.*)<br\s\/>(.*)[0-9０-９]+(.*)<a\shref=\"#2-kanjahassei/siU';
 if( preg_match_all($pattern2, $web_page2 , $result2) ){
-  $str_stage = $result2[1][0];
+  $str_stage = substr($result2[4][0], 5, -3);
 }else{
   // エラーの時
   $str_stage='';
