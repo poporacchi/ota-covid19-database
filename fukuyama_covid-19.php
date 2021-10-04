@@ -426,7 +426,9 @@ $str_stage_okayama = substr($result2[4][0], 5, -3);
 
 
 //岡山県のHPからCSVデータ取得
-$csv_okayama = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
+//$csv_okayama = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
+$csv_okayama = file_get_contents("https://okayama-pref.dataeye.jp/resource_download/10112");
+
 setlocale( LC_ALL, 'ja_JP' );
 $lines_okayama = str_getcsv($csv_okayama, "\r\n");
 $CSV_format_okayama = mb_detect_encoding($lines_okayama[0],"SJIS, UTF-8");
