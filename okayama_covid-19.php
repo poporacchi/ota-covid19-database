@@ -45,7 +45,7 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 $web_page = curl_exec($curl);
 curl_close($curl);
 //$pattern = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
-$pattern = '<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
+$pattern = '/<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
   if( preg_match_all($pattern, $web_page , $result) ){
     $str_date = $result[2][0];
     $str_date = str_replace('年','/',$str_date);
@@ -61,7 +61,7 @@ $pattern = '<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
 
 //感染状況の取得
 //$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
-$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112/";
+$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112";
  
 $ch = curl_init();
  
