@@ -477,16 +477,16 @@ for ($i = $second_index_okayama; $i>=1; $i--) { //1週間前より前の患者�
 
                     <?php
 
-if (preg_match('/ステージ１/', $str_stage_okayama)) {
+if (preg_match('/１/', $str_stage_okayama)) {
   $h3_id_okayama = 'blue';
   $str_stage_okayama = '[ステージ1] 医療提供体制に特段の支障がない段階';
-} else if (preg_match('/ステージ２/', $str_stage_okayama)) {
+} else if (preg_match('/２/', $str_stage_okayama)) {
   $h3_id_okayama = 'yellow';
   $str_stage_okayama = '[ステージ2] 感染者の漸増及び医療提供体制への負荷が蓄積する段階';
-} else if (preg_match('/ステージ３/', $str_stage_okayama)) {
+} else if (preg_match('/３/', $str_stage_okayama)) {
   $h3_id_okayama = 'brown';
   $str_stage_okayama = '[ステージ3] 感染者の急増及び医療提供体制における大きな支障の発生を避けるための対応が必要な段階 ';
-} else if (preg_match('/ステージ４/', $str_stage_okayama)) {
+} else if (preg_match('/４/', $str_stage_okayama)) {
   $h3_id_okayama = 'pink';
   $str_stage_okayama = '[ステージ4] 爆発的な感染拡大及び深刻な医療提供体制の機能不全を避けるための対応が必要な段階';
 }
