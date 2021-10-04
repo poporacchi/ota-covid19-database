@@ -84,7 +84,7 @@ curl_close($curl2);
 $pattern2 = '/kennaijoukyou-iryoutaisei\">(.*)<\/a>(.*)<br\s\/>(.*)[0-9０-９]+(.*)<a\shref=\"#2-kanjahassei/siU';
 preg_match_all($pattern2, $web_page2, $result2);
 $str_stage = substr($result2[4][0], 5, -3);
-echo $str_stage;
+
 ?>
 
 
@@ -99,7 +99,7 @@ echo $str_stage;
   }
    ?>
 </div>
-
+ステージ<?php echo $str_stage; ?><br>
 <div class="base">
 
 <div class="lower_base">
