@@ -385,13 +385,17 @@ if(empty($str_last_updated_hiroshima)){
 
                 <?php
 //岡山県の更新日の取得
-$target_okayama = "http://www.okayama-opendata.jp/opendata/ga130PreAction.action?resourceName=感染者詳細情報&keyTitle=d9c4776db7f09fff161953a2aaf03b80a9abad48&title=新型コロナウイルス感染症に関するデータ（岡山県）&isParam=1&resourceId=d021c012-297e-4ea9-bffa-cf55741884d1&licenseTitle=クリエイティブ・コモンズ+表示&datasetId=e6b3c1d2-2f1f-4735-b36e-e45d36d94761&checkFieldFormat=CSV";
+//$target_okayama = "http://www.okayama-opendata.jp/opendata/ga130PreAction.action?resourceName=感染者詳細情報&keyTitle=d9c4776db7f09fff161953a2aaf03b80a9abad48&title=新型コロナウイルス感染症に関するデータ（岡山県）&isParam=1&resourceId=d021c012-297e-4ea9-bffa-cf55741884d1&licenseTitle=クリエイティブ・コモンズ+表示&datasetId=e6b3c1d2-2f1f-4735-b36e-e45d36d94761&checkFieldFormat=CSV";
+$target_okayama = "https://www.okayama-opendata.jp/resources/10112";
+
 $curl_okayama = curl_init();
 curl_setopt($curl_okayama, CURLOPT_URL, $target_okayama);
 curl_setopt($curl_okayama, CURLOPT_RETURNTRANSFER, true);
 $web_page_okayama = curl_exec($curl_okayama);
 curl_close($curl_okayama);
-$pattern_okayama = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
+//$pattern_okayama = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
+$pattern_okayama = '/<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
+
   if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama) ){
     //更新日がハイフン区切りのため文字列を置換
     $str_date = $result_okayama[2][0];
@@ -407,19 +411,19 @@ $pattern_okayama = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU
   }
 
 //感染状況の取得
+//$target_okayama = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
 $target_okayama = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+
 $curl_okayama = curl_init();
 curl_setopt($curl_okayama, CURLOPT_URL, $target_okayama);
 curl_setopt($curl_okayama, CURLOPT_RETURNTRANSFER, true);
 $web_page_okayama = curl_exec($curl_okayama);
 curl_close($curl_okayama);
-$pattern_okayama = '/<strong>総合的判断：(.*)<\/strong>/siU';
-if( preg_match_all($pattern_okayama, $web_page_okayama , $result_okayama2) ){
-  $str_stage_okayama = $result_okayama2[1][0];
-}else{
-  // エラーの時
-  $str_stage_okayama='';
-}
+//$pattern_okayama = '/<strong>総合的判断：(.*)<\/strong>/siU';
+$pattern_okayama = '/kennaijoukyou-iryoutaisei\">(.*)<\/a>(.*)<br\s\/>(.*)[0-9０-９]+(.*)<a\shref=\"#2-kanjahassei/siU';
+preg_match_all($pattern2, $web_page2, $result2);
+$str_stage_okayama = substr($result2[4][0], 5, -3);
+
 
 //岡山県のHPからCSVデータ取得
 $csv_okayama = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
