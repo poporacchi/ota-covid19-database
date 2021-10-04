@@ -61,7 +61,8 @@ $pattern = '/<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
 
 //感染状況の取得
 //$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
-$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112";
+$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+//$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112";
  
 $ch = curl_init();
  
@@ -79,7 +80,8 @@ curl_setopt($curl2, CURLOPT_URL, $target2);
 curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
 $web_page2 = curl_exec($curl2);
 curl_close($curl2);
-$pattern2 = '/<strong>総合的判断：(.*)<\/strong>/siU';
+//$pattern2 = '/<strong>総合的判断：(.*)<\/strong>/siU';
+$pattern2 = '/<a\shref=\"#02-kennaijoukyou-iryoutaisei\">県内の医療提供体制及び感染の状況等<\/a>(.*)<br\/><a href=\"#2-kanjahassei\">/siU';
 if( preg_match_all($pattern2, $web_page2 , $result2) ){
   $str_stage = $result2[1][0];
 }else{
