@@ -63,17 +63,7 @@ $pattern = '/<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
 //$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
 $target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
 
- 
-$ch = curl_init();
- 
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
- 
-$res =  curl_exec($ch);
- 
-var_dump($res);
- 
-curl_close($conn);
+
 
 $curl2 = curl_init();
 curl_setopt($curl2, CURLOPT_URL, $target2);
