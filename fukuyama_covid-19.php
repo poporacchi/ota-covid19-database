@@ -421,8 +421,8 @@ $web_page_okayama = curl_exec($curl_okayama);
 curl_close($curl_okayama);
 //$pattern_okayama = '/<strong>総合的判断：(.*)<\/strong>/siU';
 $pattern_okayama = '/kennaijoukyou-iryoutaisei\">(.*)<\/a>(.*)<br\s\/>(.*)[0-9０-９]+(.*)<a\shref=\"#2-kanjahassei/siU';
-preg_match_all($pattern2, $web_page2, $result2);
-$str_stage_okayama = substr($result2[4][0], 5, -3);
+preg_match_all($pattern_okayama, $web_page_okayama, $result_okayama2);
+$str_stage_okayama = substr($result_okayama2[4][0], 5, -3);
 
 
 //岡山県のHPからCSVデータ取得
