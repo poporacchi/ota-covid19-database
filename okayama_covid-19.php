@@ -70,7 +70,7 @@ $res =  curl_exec($ch);
 var_dump($res);
  
 curl_close($conn);
- "
+
 $curl2 = curl_init();
 curl_setopt($curl2, CURLOPT_URL, $target2);
 curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
