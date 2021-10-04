@@ -57,7 +57,20 @@ $pattern = '/<th\sscope=\"row\">最終更新<\/th>(.*)<td>(.*)<\/td>/siU';
   }
 
 //感染状況の取得
-$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+//$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
+$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112/";
+ 
+$ch = curl_init();
+ 
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+ 
+$res =  curl_exec($ch);
+ 
+var_dump($res);
+ 
+curl_close($conn);
+ "
 $curl2 = curl_init();
 curl_setopt($curl2, CURLOPT_URL, $target2);
 curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
