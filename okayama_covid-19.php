@@ -62,7 +62,7 @@ $pattern = '/<td>最終更新<\/td>(.*)<td>(.*)<\/td>/siU';
 //感染状況の取得
 //$target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
 $target2 = "https://www.pref.okayama.jp/page/724270.html#01-kennaijoukyou";
-//$target2 = "https://okayama-pref.dataeye.jp/resource_download/10112";
+
  
 $ch = curl_init();
  
@@ -99,7 +99,7 @@ $str_stage = substr($result2[4][0], 5, -3);
   }
    ?>
 </div>
-ステージ<?php echo $str_stage; ?><br>
+
 <div class="base">
 
 <div class="lower_base">
@@ -108,7 +108,9 @@ $str_stage = substr($result2[4][0], 5, -3);
 <?php
 
 //岡山県のHPからCSVデータ取得
-$csv = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
+//$csv = file_get_contents("http://www.okayama-opendata.jp/ckan/dataset/e6b3c1d2-2f1f-4735-b36e-e45d36d94761/resource/d021c012-297e-4ea9-bffa-cf55741884d1/download/kansenshashousaijouhou.csv");
+$csv = file_get_contents("https://okayama-pref.dataeye.jp/resource_download/10112");
+
 setlocale( LC_ALL, 'ja_JP' );
 $lines = str_getcsv($csv, "\r\n");
 if (preg_match('/330001,/',$lines[1],$result)){
